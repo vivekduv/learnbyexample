@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://camel.apache.org/schema/spring
+          http://camel.apache.org/schema/spring/camel-spring.xsd
+          http://www.springframework.org/schema/util
+          http://www.springframework.org/schema/util/spring-util.xsd
+          http://www.springframework.org/schema/context
+          https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--   <camel:camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+        &lt;!&ndash; Add routes here &ndash;&gt;
+        <contextScan/>
+    </camel:camelContext>-->
+    <context:annotation-config/>
+    <context:component-scan base-package="org.learnbyexample.camel.routes"/>
+
+    <context:property-placeholder location="app.properties"/>
+
+    <!-- setup kafka component -->
+    <bean id="kafkaC" class="org.apache.camel.component.kafka.KafkaComponent">
+        <property name="configuration"  ref="kafkaConfig"/>
+    </bean>
+
+
+    <bean id="kafkaConfig" class="org.apache.camel.component.kafka.KafkaConfiguration" >
+        <property name="brokers" value="${spring.kafka.bootstrap-servers}"/>
+    </bean>
+
+</beans>
