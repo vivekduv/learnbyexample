@@ -22,10 +22,10 @@ public class AddRoutes implements RoutesBuilder {
     @Override
     public void addRoutesToCamelContext(CamelContext context) throws Exception {
         setApplicationContext(new ClassPathXmlApplicationContext("appContextCamel.xml"));
-        WordRoute wordRoute = applicationContext.getBean(WordRoute.class);
-        WordRoute2 wordRoute2 = applicationContext.getBean(WordRoute2.class);
-        context.addRoutes(wordRoute);
-        context.addRoutes(wordRoute2);
+        WordRouteConsumer wordRouteConsumer = applicationContext.getBean(WordRouteConsumer.class);
+        WordRouteProducer wordRouteProducer = applicationContext.getBean(WordRouteProducer.class);
+        context.addRoutes(wordRouteConsumer);
+        context.addRoutes(wordRouteProducer);
     }
 
     @Override
