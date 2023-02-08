@@ -9,14 +9,13 @@ public class MainApp {
 
     public static void main(String[] args) throws InterruptedException {
         ApplicationContext context = new ClassPathXmlApplicationContext("appContext.xml");
-        UserService userService = context.getBean(UserService.class);
-        System.out.println(userService.getSomeDefault());
-        Greeting greeting = new Greeting();
-        greeting.setMsg("Hi How are you ?");
+        MessageService userService = context.getBean(MessageService.class);
+         Greeting greeting = new Greeting();
+        greeting.setMsg("demo java2");
         greeting.setName("Vivek");
 
-        userService.Send("demo_java","vivek2");
-        userService.Send("demo_java1",greeting);
+        userService.Send("demo_java1","demo_java1");
+        userService.Send("demo_java2",greeting);
         Thread.sleep(10000);
 
     }

@@ -13,10 +13,18 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 public class KafkaProducer {
 
     private static final Logger LOG = LoggerFactory.getLogger(KafkaProducer.class);
-    @Autowired
+
     private KafkaTemplate<String, String> kafkaTemplate;
-    @Autowired
+
     private KafkaTemplate<String, Greeting> kafkaTemplateGreeting;
+    @Autowired
+    public void setKafkaTemplate(KafkaTemplate<String, String> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
+    @Autowired
+    public void setKafkaTemplateGreeting(KafkaTemplate<String, Greeting> kafkaTemplateGreeting) {
+        this.kafkaTemplateGreeting = kafkaTemplateGreeting;
+    }
 
     public void send(String topicName , Greeting message){
         LOG.info("sending message='{}' to topic='{}'", message, topicName);

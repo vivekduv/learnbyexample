@@ -1,23 +1,19 @@
 package org.learnbyexample.springframework;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserService {
-    @Value("${unknown.param:some default}")
-    private String someDefault;
-
-    @Autowired
+public class MessageService {
     private KafkaProducer kafkaProducer;
-
+     private KafkaConsumer kafkaConsumer;
     @Autowired
-    private KafkaConsumer kafkaConsumer;
-
-
-    public String getSomeDefault() {
-        return someDefault;
+    public void setKafkaProducer(KafkaProducer kafkaProducer) {
+        this.kafkaProducer = kafkaProducer;
+    }
+    @Autowired
+    public void setKafkaConsumer(KafkaConsumer kafkaConsumer) {
+        this.kafkaConsumer = kafkaConsumer;
     }
 
     public void Send(String topic, String message) {
@@ -27,7 +23,4 @@ public class UserService {
         kafkaProducer.send(topic, message);
     }
 
-    public void setSomeDefault(String someDefault) {
-        this.someDefault = someDefault;
-    }
 }
