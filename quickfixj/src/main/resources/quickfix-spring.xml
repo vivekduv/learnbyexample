@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:jms="http://www.springframework.org/schema/jms" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans      http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/context    http://www.springframework.org/schema/context/spring-context-3.2.xsd
+    http://camel.apache.org/schema/spring            http://camel.apache.org/schema/spring/camel-spring.xsd
+    http://www.springframework.org/schema/jms 		http://www.springframework.org/schema/jms/spring-jms-3.2.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!-- quickfix component -->
+    <bean id="quickfixjComponent" class="org.apache.camel.component.quickfixj.QuickfixjComponent">
+        <property name="configurations">
+            <util:map>
+                <entry key="example" value-ref="quickfixjConfiguration"/>
+            </util:map>
+        </property>
+        <property name="messageFactory">
+            <bean class="quickfix.DefaultMessageFactory"/>
+        </property>
+    </bean>
+    <camel:camelContext xmlns="http://camel.apache.org/schema/spring" id="camel">
+        <contextScan />
+    </camel:camelContext>
+
+    <!-- quickfix settings -->
+    <bean id="quickfixjConfiguration"
+          class="org.apache.camel.component.quickfixj.QuickfixjConfiguration">
+        <property name="defaultSettings">
+            <util:map>
+
+              <!--  <entry key="UseDataDictionary" value="${fix.useDataDictionary}"/> -->
+             <!--  <entry key="DataDictionary" value="${fix.dataDictionary}"/> -->
+                <entry key="ValidateFieldsHaveValues" value="${fix.validateFieldsHaveValues}"/>
+                <entry key="ValidateUserDefinedFields" value="${fix.validateUserDefinedFields}"/>
+                <entry key="ValidateFieldsOutOfOrder" value="${fix.validateFieldsOutOfOrder}"/>
+                <entry key="StartTime" value="${fix.startTime}"/>
+                <entry key="EndTime" value="${fix.endTime}"/>
+                <entry key="HeartBtInt" value="${fix.heartBtInt}"/>
+                <entry key="CheckLatency" value="${fix.checkLatency}"/>
+                <entry key="MaxLatency" value="${fix.maxLatency}"/>
+                <entry key="FileStorePath" value="${fix.store.path}" />
+                <entry key="FileLogPath" value="${fix.logs.path}" />
+            </util:map>
+        </property>
+        <property name="sessionSettings">
+            <util:map>
+                <entry key="FIX.4.2:PTP->STPHUB">
+                    <util:map>
+                        <entry key="ConnectionType" value="${fix.stphub.connectionType}"/>
+                        <entry key="SocketAcceptPort" value="${fix.stphub.socketAcceptPort}"/>
+                    </util:map>
+                </entry>
+                <entry key="FIX.4.2:PTP2->STPHUB2">
+                    <util:map>
+                        <entry key="ConnectionType" value="${fix.stphub2.connectionType}"/>
+                        <entry key="SocketAcceptPort" value="${fix.stphub2.socketAcceptPort}"/>
+                    </util:map>
+                </entry>
+                <entry key="FIX.4.2:PTPFIX->BRAPPIA">
+                    <util:map>
+                        <entry key="ConnectionType" value="${fix.br.connectionType}"/>
+                        <entry key="SocketConnectPort" value="${fix.br.socketConnectPort}"/>
+                        <entry key="SocketConnectHost" value="${fix.br.socketConnectHost}"/>
+                        <entry key="ReconnectInterval" value="${fix.br.reconnectInterval}"/>
+                    </util:map>
+                </entry>
+                <entry key="FIX.4.2:PTPFIX2->BRAPPIA2">
+                    <util:map>
+                        <entry key="ConnectionType" value="${fix.br2.connectionType}"/>
+                        <entry key="SocketConnectPort" value="${fix.br2.socketConnectPort}"/>
+                        <entry key="SocketConnectHost" value="${fix.br2.socketConnectHost}"/>
+                        <entry key="ReconnectInterval" value="${fix.br2.reconnectInterval}"/>
+                    </util:map>
+                </entry>
+            </util:map>
+        </property>
+    </bean>
+
+    <context:annotation-config />
+    <context:component-scan base-package="org.learnbyexample.camel.routes,org.apache.camel.component"/>
+    <context:property-placeholder location="app.properties"/>
+
+</beans>

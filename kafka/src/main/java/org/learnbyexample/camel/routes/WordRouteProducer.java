@@ -17,7 +17,7 @@ public class WordRouteProducer extends RouteBuilder {
     @Override
 
     public void configure() throws Exception {
-
+            if (1==2)
             from("timer:foo?period=100")
                     .bean(new WordBean())
                     .to(userConfig.getProduceUrl())

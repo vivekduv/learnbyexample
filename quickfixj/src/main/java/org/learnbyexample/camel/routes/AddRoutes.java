@@ -1,7 +1,9 @@
 package org.learnbyexample.camel.routes;
 
 import org.apache.camel.CamelContext;
+import org.apache.camel.Component;
 import org.apache.camel.RoutesBuilder;
+import org.apache.camel.component.quickfixj.QuickfixjComponent;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -22,16 +24,23 @@ public class AddRoutes implements RoutesBuilder {
 
     @Override
     public void addRoutesToCamelContext(CamelContext context) throws Exception {
-        setApplicationContext(new ClassPathXmlApplicationContext("appContextCamel.xml"));
-       // WordRouteConsumer wordRouteConsumer = applicationContext.getBean(WordRouteConsumer.class);
-       // WordRouteProducer wordRouteProducer = applicationContext.getBean(WordRouteProducer.class);
-      //  context = new DefaultCamelContext();
-       // context.addRoutes(wordRouteConsumer);
-     //   context.addRoutes(wordRouteProducer);
+        setApplicationContext(new ClassPathXmlApplicationContext("quickfix-spring.xml"));
+        //context=applicationContext.getBean("camel",CamelContext.class);
+        //context=new DefaultCamelContext();
+      //  Component a = context.getComponent("quickfix");
+        //context.addComponent("quickfix",new QuickfixjComponent());
+       // FixRoute fixRoute = applicationContext.getBean(FixRoute.class);
+      // context.addRoutes(fixRoute);
     }
 
     @Override
     public Set<String> updateRoutesToCamelContext(CamelContext context) throws Exception {
         return null;
     }
+
+//    @Override
+//    public Set<String> updateRoutesToCamelContext(CamelContext context) throws Exception {
+//        return null;
+//    }
+
 }

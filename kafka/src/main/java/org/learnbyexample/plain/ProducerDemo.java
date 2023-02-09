@@ -36,7 +36,7 @@ public class ProducerDemo {
 
         // create a Producer Record
         ProducerRecord<String, String> producerRecord =
-                new ProducerRecord<>("demo_java1", "demo java1..... hello World");
+                new ProducerRecord<>("demo_java", "demo java..... hello World");
 
         // send data
         producer.send(producerRecord);
