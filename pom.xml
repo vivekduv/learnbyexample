@@ -17,27 +17,22 @@
         <module>quickfixj</module>
     </modules>
     <properties>
-
-        <org.springframework.version>5.3.25</org.springframework.version>
-<!--       <camel.version>2.25.4</camel.version>-->
-<!--        <camel.version>3.20.1</camel.version>-->
-            <camel.version>3.19.0</camel.version>
-        <quickfixj.version>2.3.1</quickfixj.version>
-        <slfj.version>1.7.36</slfj.version>
-        <quartz2.version>2.25.4</quartz2.version>
-
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 
-        <kafka.version>3.3.2</kafka.version>
+        <org.springframework.version>5.3.25</org.springframework.version>
+        <camel.version>3.20.2</camel.version>
+        <quickfixj.version>2.3.1</quickfixj.version>
+        <slf4j.version>1.7.36</slf4j.version>
+        <quartz2.version>2.25.4</quartz2.version>
+        <kafka.version>3.4.0</kafka.version>
         <spring-kafka.version>2.9.5</spring-kafka.version>
+        <jaxb-api.version>2.3.1</jaxb-api.version>
+        <jaxb-core.version>2.3.0</jaxb-core.version>
     </properties>
-
     <dependencies>
-
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
@@ -95,14 +90,12 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring-xml</artifactId>
-            <version>3.19.0</version>
+            <version>${camel.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-kafka</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
@@ -168,13 +161,12 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>${slfj.version}</version>
+            <version>${slf4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>${slfj.version}</version>
-
+            <version>${slf4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.kafka</groupId>
@@ -195,19 +187,18 @@
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
-            <version>2.3.1</version>
+            <version>${jaxb-api.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-core</artifactId>
-            <version>2.3.0.1</version>
+            <version>${jaxb-core.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
-            <version>2.3.2</version>
+            <version>${jaxb-api.version}</version>
         </dependency>
 
     </dependencies>

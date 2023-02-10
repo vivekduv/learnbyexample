@@ -6,25 +6,26 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserConfig {
-    @Value("${fix.senderid:1}")
-    private String senderId;
 
-    @Value("${fix.receieverid:2}")
-    private String receiverId;
+    @Value("${fix.incoming.session}")
+    private String fixIncomingSession;
 
-    public String getSenderId() {
-        return senderId;
+    @Value("${fix.outgoing.session}")
+    private String fixOutgoingSession;
+
+    public String getFixIncomingSession() {
+        return fixIncomingSession;
     }
 
-    public void setSenderId(String senderId) {
-        this.senderId = senderId;
+    public void setFixIncomingSession(String fixIncomingSession) {
+        this.fixIncomingSession = fixIncomingSession;
     }
 
-    public String getReceiverId() {
-        return receiverId;
+    public String getFixOutgoingSession() {
+        return fixOutgoingSession;
     }
 
-    public void setReceiverId(String receiverId) {
-        this.receiverId = receiverId;
+    public void setFixOutgoingSession(String fixOutgoingSession) {
+        this.fixOutgoingSession = fixOutgoingSession;
     }
 }
