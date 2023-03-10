@@ -2,16 +2,20 @@ package org.learnbyexample.camel.routes;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.camel.builder.PredicateBuilder;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.quickfixj.*;
+import org.apache.camel.component.quickfixj.CannotSendException;
+import org.apache.camel.component.quickfixj.QuickfixjEndpoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import quickfix.FieldNotFound;
 import quickfix.Message;
 import quickfix.Session;
 import quickfix.SessionID;
-import quickfix.field.*;
-import quickfix.fix40.OrderStatusRequest;
+import quickfix.field.MsgType;
+import quickfix.field.SenderCompID;
+import quickfix.field.Symbol;
+import quickfix.field.TargetCompID;
 import quickfix.fix42.ExecutionReport;
 
 
@@ -25,14 +29,11 @@ public class FixRoute extends RouteBuilder {
     }
     @Override
     public void configure() throws Exception {
-        System.out.println("HHHHH");
-        //from("quickfixjComponent:example?sessionID=" + userConfig.getFixIncomingSession()).to("seda:abc");
-       // if (1==2)
 
         from("seda:main").process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
-                        System.out.println("hello 2");
+
                         ExecutionReport message =  exchange.getIn().getBody(ExecutionReport.class);
                         Symbol symbol = message.get(new Symbol());
                         symbol.setValue("NEW Symbol");
@@ -49,12 +50,12 @@ public class FixRoute extends RouteBuilder {
 
        from("quickfixjComponent:example?sessionID=" + userConfig.getFixIncomingSession() )
        //        .filter(header(QuickfixjEndpoint.EVENT_CATEGORY_KEY).isEqualTo(QuickfixjEventCategory.AppMessageReceived))
-           .filter(header(QuickfixjEndpoint.MESSAGE_TYPE_KEY).isEqualTo(MsgType.EXECUTION_REPORT))
-               .process(new Processor() {
+           .filter(
+                   PredicateBuilder.or(
+                   header(QuickfixjEndpoint.MESSAGE_TYPE_KEY).isEqualTo(MsgType.EXECUTION_REPORT), header(QuickfixjEndpoint.MESSAGE_TYPE_KEY).isEqualTo(MsgType.ALLOCATION_INSTRUCTION))
+                    ).process(new Processor() {
                    @Override
                    public void process(Exchange exchange) throws Exception {
-                       System.out.println("hello");
-                       // For the reply take the reverse sessionID into the account, see org.apache.camel.component.quickfixj.MessagePredicate
                        Message message = (quickfix.fix42.Message) exchange.getIn().getBody();
                        SenderCompID senderCompID = new SenderCompID();
 

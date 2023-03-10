@@ -6,7 +6,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class QuickFixCamelMainApp {
     public static void main(String... args) throws Exception {
-        ApplicationContext applicationContext= new ClassPathXmlApplicationContext("fixAppContext.xml");
+       ApplicationContext applicationContext= new ClassPathXmlApplicationContext("fixAppContext.xml");
         Main main = new Main();
         main.run(args);
     }
