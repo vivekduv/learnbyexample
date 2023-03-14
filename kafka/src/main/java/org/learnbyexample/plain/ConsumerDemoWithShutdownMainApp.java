@@ -12,9 +12,9 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.Properties;
 
-public class ConsumerDemoWithShutdown {
+public class ConsumerDemoWithShutdownMainApp {
 
-    private static final Logger log = LoggerFactory.getLogger(ConsumerDemoWithShutdown.class.getSimpleName());
+    private static final Logger log = LoggerFactory.getLogger(ConsumerDemoWithShutdownMainApp.class.getSimpleName());
 
     public static void main(String[] args) {
         log.info("I am a Kafka Consumer!");

@@ -15,8 +15,8 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.Properties;
 
-public class ConsumerDemoRebalanceListener {
-    private static final Logger log = LoggerFactory.getLogger(ConsumerDemoRebalanceListener.class);
+public class ConsumerDemoRebalanceListenerMainApp {
+    private static final Logger log = LoggerFactory.getLogger(ConsumerDemoRebalanceListenerMainApp.class);
 
     public static void main(String[] args) {
         log.info("I am a Kafka Consumer with a Rebalance");

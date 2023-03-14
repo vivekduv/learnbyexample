@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 
-public class ConsumerDemoThreads {
+public class ConsumerDemoThreadsMainApp {
 
     public static void main(String[] args)  {
         ConsumerDemoWorker consumerDemoWorker = new ConsumerDemoWorker();

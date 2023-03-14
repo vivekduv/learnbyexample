@@ -15,10 +15,10 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.Properties;
 
-public class ConsumerDemoAssignSeek {
+public class ConsumerDemoAssignSeekMainApp {
     public static void main(String[] args) {
 
-        Logger log = LoggerFactory.getLogger(ConsumerDemoAssignSeek.class.getName());
+        Logger log = LoggerFactory.getLogger(ConsumerDemoAssignSeekMainApp.class.getName());
 
         String bootstrapServers = "127.0.0.1:9092";
         String topic = "demo_java";

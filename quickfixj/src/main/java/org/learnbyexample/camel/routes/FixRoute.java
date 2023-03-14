@@ -80,13 +80,14 @@ public class FixRoute extends RouteBuilder {
                            return;
                        }
 
-                       final Session session = quickfix.Session.lookupSession(new SessionID(userConfig.getFixIncomingSession()));
+                       try (Session session = Session.lookupSession(new SessionID(userConfig.getFixIncomingSession()))) {
 
 
-                       if (session != null && session.isLoggedOn()) {
-                           exchange.getIn().setHeader("FIX_SESSION_STATUS", "true");
-                       } else {
-                           exchange.getIn().setHeader("FIX_SESSION_STATUS", "false");
+                           if (session != null && session.isLoggedOn()) {
+                               exchange.getIn().setHeader("FIX_SESSION_STATUS", "true");
+                           } else {
+                               exchange.getIn().setHeader("FIX_SESSION_STATUS", "false");
+                           }
                        }
                    }
 
