@@ -11,9 +11,9 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.Properties;
 
-public class MainApp {
+public class ConsumerDemoKeysMainApp {
 
-    private static final Logger log = LoggerFactory.getLogger(MainApp.class.getSimpleName());
+    private static final Logger log = LoggerFactory.getLogger(ConsumerDemoKeysMainApp.class.getSimpleName());
 
     public static void main(String[] args) {
         log.info("I am a Kafka Consumer!");
