@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="org.learnbyexample"></context:component-scan>
+
+    <!-- <bean id="p" class="org.learnbyexample.jasypt.Props">
+            <property name="url" value="${db.url}"></property>
+          <property name="password" value="${db.password}"></property>
+     </bean>
+    -->
+    <bean id="environmentVariablesConfiguration" class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">
+        <property name="algorithm" value="PBEWithHmacSHA512AndAES_256" />
+        <property name="passwordEnvName" value="ENCRYPTION_PASSWORD" />
+        <property name="ivGeneratorClassName" value="org.jasypt.iv.RandomIvGenerator"/>
+
+    </bean>
+
+    <bean id="configurationEncryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
+        <property name="config" ref="environmentVariablesConfiguration" />
+    </bean>
+
+    <bean id="propertyConfigurer" class="org.jasypt.spring4.properties.EncryptablePropertyPlaceholderConfigurer">
+        <constructor-arg ref="configurationEncryptor" />
+        <property name="location" value="app.properties"/>
+    </bean>
+
+</beans>

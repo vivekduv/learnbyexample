@@ -1,0 +1,42 @@
+vivek@vivek-mac:/Users/vivek/Downloads/jasypt-1.9.3/bin/>./encrypt.sh input=vivek password=hello algorithm=PBEWithHmacSHA512AndAES_256 ivGeneratorClassName=org.jasypt.iv.RandomIvGenerator
+
+----ENVIRONMENT-----------------
+
+Runtime: Oracle Corporation Java HotSpot(TM) 64-Bit Server VM 25.231-b11
+
+
+
+----ARGUMENTS-------------------
+
+ivGeneratorClassName: org.jasypt.iv.RandomIvGenerator
+algorithm: PBEWithHmacSHA512AndAES_256
+input: vivek
+password: hello
+
+
+
+----OUTPUT----------------------
+
+Bz9zMaQ5saOe74Z1mMbd6pIxSFyvdZswBdGBajMW18J5d5azXH5HIafpOVmEmIHy
+
+
+vivek@vivek-mac:/Users/vivek/Downloads/jasypt-1.9.3/bin/>./decrypt.sh input=Bz9zMaQ5saOe74Z1mMbd6pIxSFyvdZswBdGBajMW18J5d5azXH5HIafpOVmEmIHy password=hello algorithm=PBEWithHmacSHA512AndAES_256 ivGeneratorClassName=org.jasypt.iv.RandomIvGenerator
+
+----ENVIRONMENT-----------------
+
+Runtime: Oracle Corporation Java HotSpot(TM) 64-Bit Server VM 25.231-b11
+
+
+
+----ARGUMENTS-------------------
+
+ivGeneratorClassName: org.jasypt.iv.RandomIvGenerator
+algorithm: PBEWithHmacSHA512AndAES_256
+input: Bz9zMaQ5saOe74Z1mMbd6pIxSFyvdZswBdGBajMW18J5d5azXH5HIafpOVmEmIHy
+password: hello
+
+
+
+----OUTPUT----------------------
+
+vivek

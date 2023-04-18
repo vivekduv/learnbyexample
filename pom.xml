@@ -31,6 +31,7 @@
         <spring-kafka.version>2.9.5</spring-kafka.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
         <jaxb-core.version>2.3.0</jaxb-core.version>
+        <jasypt.version>1.9.3</jasypt.version>
     </properties>
     <dependencies>
         <dependency>
@@ -199,6 +200,18 @@
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
             <version>${jaxb-api.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jasypt</groupId>
+            <artifactId>jasypt</artifactId>
+            <version>${jasypt.version}</version>
+        </dependency>
+
+         <dependency>
+            <groupId>org.jasypt</groupId>
+            <artifactId>jasypt-spring4</artifactId>
+            <version>${jasypt.version}</version>
         </dependency>
 
     </dependencies>
