@@ -19,7 +19,7 @@ public class ProducerDemoMainApp {
         Properties properties = new Properties();
 
         // connect to Localhost
-         properties.setProperty("bootstrap.servers", "127.0.0.1:9092");
+         properties.setProperty("bootstrap.servers", "vivekduv.ddns.net:9092");
 
         // connect to Conduktor Playground
        /* properties.setProperty("bootstrap.servers", "cluster.playground.cdkt.io:9092");
@@ -36,7 +36,7 @@ public class ProducerDemoMainApp {
 
         // create a Producer Record
         ProducerRecord<String, String> producerRecord =
-                new ProducerRecord<>("demo_java", "demo java..... hello World");
+                new ProducerRecord<>("demo_java", "demo javavvv..... hello World");
 
         // send data
         producer.send(producerRecord);
