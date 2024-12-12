@@ -121,11 +121,11 @@ class Execution {
 public class NSCCFileReader {
     
 
-    public static void runRecon(List<Execution> executions, Map<String, NsccReconResultData> nsccReconResultDataMap) {
+    public static void runRecon(List<Execution> executions, Map<String, NsccReconResultData> nsccCacheMap) {
         for (Execution execution : executions) {
 
-            if (nsccReconResultDataMap.containsKey(execution.toKey())) {
-                NsccReconResultData nsccReconResultData = nsccReconResultDataMap.get(execution.toKey());
+            if (nsccCacheMap.containsKey(execution.toKey())) {
+                NsccReconResultData nsccReconResultData = nsccCacheMap.get(execution.toKey());
                 if ("N".equalsIgnoreCase(execution.getAction())) {
                     if (nsccReconResultData.getExecutionIdAndCorrespondingQtyMap().containsKey(execution.getExecutionID())) {
                         System.out.println(execution.getExecutionID()+" is already present in the map so ignoring");
@@ -133,6 +133,7 @@ public class NSCCFileReader {
                     }
                     else
                     {
+                        //Different execution
                         nsccReconResultData.getExecutionIdAndCorrespondingQtyMap().put(execution.getExecutionID(), execution.getQty());
                         int totalQty=nsccReconResultData.getNsscRealTimeQty()+execution.getQty();
                         nsccReconResultData.setNsscRealTimeQty(totalQty);
@@ -157,13 +158,14 @@ public class NSCCFileReader {
                 }
             }
             else {
+                //New Key - first time 
                 NsccReconResultData nsccReconResultData = new NsccReconResultData();
                 if ("N".equalsIgnoreCase(execution.getAction())) {
                     
                     nsccReconResultData.setNsscRealTimeQty(execution.getQty());
                 }
                 nsccReconResultData.getExecutionIdAndCorrespondingQtyMap().put(execution.getExecutionID(), execution.getQty());
-                nsccReconResultDataMap.put(execution.toKey(), nsccReconResultData);
+                nsccCacheMap.put(execution.toKey(), nsccReconResultData);
             }
         }
     }
