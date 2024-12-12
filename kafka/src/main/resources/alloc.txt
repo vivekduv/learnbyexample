@@ -1,0 +1,13 @@
+ID|action|tradedate|settledate|managercode|symbol|side|qty
+alloc1|N|20241211|20241212|abcd|IBM|Buy|10
+alloc2|N|20241211|20241212|abcd|IBM|Buy|11
+alloc3|N|20241211|20241212|abcd|IBM|Buy|12
+alloc4|N|20241211|20241212|abcd|IBM|Buy|13
+alloc5|N|20241211|20241212|abcd|MSFT|Buy|5
+alloc6|N|20241211|20241212|abcd|MSFT|Buy|1
+alloc1|C|20241211|20241212|abcd|IBM|Buy|10
+alloc4|A|20241211|20241212|abcd|IBM|Buy|1200
+alloc5|C|20241211|20241212|abcd|MSFT|Buy|5
+alloc6|A|20241211|20241212|abcd|MSFT|Buy|25
+alloc7|N|20241211|20241212|hhhh|MSFT|Buy|99
+alloc2|C|20241211|20241212|abcd|IBM|Buy|11
