@@ -5,6 +5,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+class NsscCache {
+    private Map<String, NsccCacheValue> nsccCacheMap;
+    public NsscCache() {
+        this.nsccCacheMap = new HashMap<>();
+    }
+    public Map<String, NsccCacheValue> getNsccCacheMap() {
+        return nsccCacheMap;
+    }
+    public void setNsccCacheMap(Map<String, NsccCacheValue> nsccCacheMap) {
+        this.nsccCacheMap = nsccCacheMap;
+    }
+}
 class NsccCacheValue {
     private int nsscRealTimeQty;
     private Map<String, Integer> executionIdAndCorrespondingQtyMap;
@@ -198,10 +211,11 @@ public class NSCCFileReader {
         }
 
        // NSCCFileReader nsccFileReader=new NSCCFileReader();
-        Map<String, NsccCacheValue> nsccCacheMap = new HashMap<>();
-        runRecon(executions,nsccCacheMap);
+        NsscCache nsccCache=new NsscCache();
+
+        runRecon(executions,nsccCache.getNsccCacheMap());
         //loop nsccCacheMap
-        for (Map.Entry<String, NsccCacheValue> entry : nsccCacheMap.entrySet()) {
+        for (Map.Entry<String, NsccCacheValue> entry : nsccCache.getNsccCacheMap().entrySet()) {
             System.out.println("Key: " + entry.getKey());
             System.out.println("Value: " + entry.getValue());
         }
