@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-class NsccReconResultData {
+class NsccCacheValue {
     private int nsscRealTimeQty;
     private Map<String, Integer> executionIdAndCorrespondingQtyMap;
 
@@ -22,12 +22,12 @@ class NsccReconResultData {
     public void setExecutionIdAndCorrespondingQtyMap(Map<String, Integer> executionIdAndCorrespondingQtyMap) {
         this.executionIdAndCorrespondingQtyMap = executionIdAndCorrespondingQtyMap;
     }
-    public NsccReconResultData() {
+    public NsccCacheValue() {
         this.executionIdAndCorrespondingQtyMap = new HashMap<>();
     }
     @Override
     public String toString() {
-        return "NsccReconResultData{" +
+        return "NsccCacheValue{" +
                 "nsscRtQty=" + nsscRealTimeQty +
                 ", executionQtyMap=" + executionIdAndCorrespondingQtyMap +
                 '}';
@@ -121,11 +121,11 @@ class Execution {
 public class NSCCFileReader {
     
 
-    public static void runRecon(List<Execution> executions, Map<String, NsccReconResultData> nsccCacheMap) {
+    public static void runRecon(List<Execution> executions, Map<String, NsccCacheValue> nsccCacheMap) {
         for (Execution execution : executions) {
 
             if (nsccCacheMap.containsKey(execution.toKey())) {
-                NsccReconResultData nsccReconResultData = nsccCacheMap.get(execution.toKey());
+                NsccCacheValue nsccReconResultData = nsccCacheMap.get(execution.toKey());
                 if ("N".equalsIgnoreCase(execution.getAction())) {
                     if (nsccReconResultData.getExecutionIdAndCorrespondingQtyMap().containsKey(execution.getExecutionID())) {
                         System.out.println(execution.getExecutionID()+" is already present in the map so ignoring");
@@ -158,8 +158,8 @@ public class NSCCFileReader {
                 }
             }
             else {
-                //New Key - first time 
-                NsccReconResultData nsccReconResultData = new NsccReconResultData();
+                //New Key - first time
+                NsccCacheValue nsccReconResultData = new NsccCacheValue();
                 if ("N".equalsIgnoreCase(execution.getAction())) {
                     
                     nsccReconResultData.setNsscRealTimeQty(execution.getQty());
@@ -198,10 +198,10 @@ public class NSCCFileReader {
         }
 
        // NSCCFileReader nsccFileReader=new NSCCFileReader();
-        Map<String, NsccReconResultData> nsccCacheMap = new HashMap<>();
+        Map<String, NsccCacheValue> nsccCacheMap = new HashMap<>();
         runRecon(executions,nsccCacheMap);
         //loop nsccCacheMap
-        for (Map.Entry<String, NsccReconResultData> entry : nsccCacheMap.entrySet()) {
+        for (Map.Entry<String, NsccCacheValue> entry : nsccCacheMap.entrySet()) {
             System.out.println("Key: " + entry.getKey());
             System.out.println("Value: " + entry.getValue());
         }
