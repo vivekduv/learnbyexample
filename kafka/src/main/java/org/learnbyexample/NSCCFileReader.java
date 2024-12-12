@@ -1,5 +1,7 @@
 package org.learnbyexample;
 
+import org.apache.kafka.common.protocol.types.Field;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +23,15 @@ class NsscCache {
 class NsccCacheValue {
     private int nsscRealTimeQty;
     private Map<String, Integer> executionIdAndCorrespondingQtyMap;
+    private Map<String, Integer> cancelledExecutionIdAndCorrespondingQtyMap;
+
+    public Map<String, Integer> getCancelledExecutionIdAndCorrespondingQtyMap() {
+        return cancelledExecutionIdAndCorrespondingQtyMap;
+    }
+
+    public void setCancelledExecutionIdAndCorrespondingQtyMap(Map<String, Integer> cancelledExecutionIdAndCorrespondingQtyMap) {
+        this.cancelledExecutionIdAndCorrespondingQtyMap = cancelledExecutionIdAndCorrespondingQtyMap;
+    }
 
     public int getNsscRealTimeQty() {
         return nsscRealTimeQty;
@@ -37,12 +48,14 @@ class NsccCacheValue {
     }
     public NsccCacheValue() {
         this.executionIdAndCorrespondingQtyMap = new HashMap<>();
+        this.cancelledExecutionIdAndCorrespondingQtyMap = new HashMap<>();
     }
     @Override
     public String toString() {
         return "NsccCacheValue{" +
                 "nsscRtQty=" + nsscRealTimeQty +
                 ", executionQtyMap=" + executionIdAndCorrespondingQtyMap +
+                ", cancelledExecutionQtyMap=" + cancelledExecutionIdAndCorrespondingQtyMap +
                 '}';
     }
     
@@ -138,35 +151,37 @@ public class NSCCFileReader {
         for (Execution execution : executions) {
 
             if (nsccCacheMap.containsKey(execution.toKey())) {
-                NsccCacheValue nsccReconResultData = nsccCacheMap.get(execution.toKey());
+                NsccCacheValue nsccCacheValue = nsccCacheMap.get(execution.toKey());
                 if ("N".equalsIgnoreCase(execution.getAction())) {
-                    if (nsccReconResultData.getExecutionIdAndCorrespondingQtyMap().containsKey(execution.getExecutionID())) {
+                    if (nsccCacheValue.getExecutionIdAndCorrespondingQtyMap().containsKey(execution.getExecutionID())) {
                         System.out.println(execution.getExecutionID()+" is already present in the map so ignoring");
                         continue;
                     }
                     else
                     {
                         //Different execution
-                        nsccReconResultData.getExecutionIdAndCorrespondingQtyMap().put(execution.getExecutionID(), execution.getQty());
-                        int totalQty=nsccReconResultData.getNsscRealTimeQty()+execution.getQty();
-                        nsccReconResultData.setNsscRealTimeQty(totalQty);
+                        nsccCacheValue.getExecutionIdAndCorrespondingQtyMap().put(execution.getExecutionID(), execution.getQty());
+                        int totalQty=nsccCacheValue.getNsscRealTimeQty()+execution.getQty();
+                        nsccCacheValue.setNsscRealTimeQty(totalQty);
                     }
                 }
                 if ("C".equalsIgnoreCase(execution.getAction())) {
-                    if (nsccReconResultData.getExecutionIdAndCorrespondingQtyMap().containsKey(execution.getExecutionID())) {
-                        int totalQty=nsccReconResultData.getNsscRealTimeQty()-execution.getQty();
-                        nsccReconResultData.setNsscRealTimeQty(totalQty);
-                        nsccReconResultData.getExecutionIdAndCorrespondingQtyMap().remove(execution.getExecutionID());
+                    if (nsccCacheValue.getExecutionIdAndCorrespondingQtyMap().containsKey(execution.getExecutionID())) {
+                        int totalQty=nsccCacheValue.getNsscRealTimeQty()-execution.getQty();
+                        nsccCacheValue.setNsscRealTimeQty(totalQty);
+                        nsccCacheValue.getExecutionIdAndCorrespondingQtyMap().remove(execution.getExecutionID());
+                        nsccCacheValue.getCancelledExecutionIdAndCorrespondingQtyMap().put(execution.getExecutionID(), execution.getQty());
+
                     }
                 }
                 if ("A".equalsIgnoreCase(execution.getAction())) {
-                    if (nsccReconResultData.getExecutionIdAndCorrespondingQtyMap().containsKey(execution.getExecutionID())) {
-                        nsccReconResultData.getExecutionIdAndCorrespondingQtyMap().put(execution.getExecutionID(), execution.getQty());
+                    if (nsccCacheValue.getExecutionIdAndCorrespondingQtyMap().containsKey(execution.getExecutionID())) {
+                        nsccCacheValue.getExecutionIdAndCorrespondingQtyMap().put(execution.getExecutionID(), execution.getQty());
                         int totalQty = 0;
-                        for (int qty : nsccReconResultData.getExecutionIdAndCorrespondingQtyMap().values()) {
+                        for (int qty : nsccCacheValue.getExecutionIdAndCorrespondingQtyMap().values()) {
                             totalQty += qty;
                         }
-                        nsccReconResultData.setNsscRealTimeQty(totalQty);
+                        nsccCacheValue.setNsscRealTimeQty(totalQty);
                     }
                 }
             }
@@ -216,8 +231,10 @@ public class NSCCFileReader {
         runRecon(executions,nsccCache.getNsccCacheMap());
         //loop nsccCacheMap
         for (Map.Entry<String, NsccCacheValue> entry : nsccCache.getNsccCacheMap().entrySet()) {
-            System.out.println("Key: " + entry.getKey());
-            System.out.println("Value: " + entry.getValue());
+            String key = entry.getKey();
+            String value = entry.getValue().toString();
+            System.out.println("[Key: " + key + "] ->" + "[Value: " + value + "]");
+
         }
     }
     
