@@ -137,7 +137,7 @@ class CacheValue {
     }
 }
 class Trade {
-    private String tradeID;
+    private String id;
     private String action;
     private String tradeDate;
     private String settleDate;
@@ -147,9 +147,9 @@ class Trade {
     private int qty;
 
     // Constructor
-    public Trade(String executionID, String action, String tradeDate, String settleDate,
+    public Trade(String id, String action, String tradeDate, String settleDate,
                  String managerCode, String symbol, String side, int qty) {
-        this.tradeID = executionID;
+        this.id = id;
         this.action = action;
         this.tradeDate = tradeDate;
         this.settleDate = settleDate;
@@ -160,8 +160,8 @@ class Trade {
     }
 
     // Getters and toString() for debugging
-    public String getTradeID() {
-        return tradeID;
+    public String getId() {
+        return id;
     }
 
     public String getAction() {
@@ -194,8 +194,8 @@ class Trade {
 
     @Override
     public String toString() {
-        return "Execution{" +
-                "executionID='" + tradeID + '\'' +
+        return "Trade{" +
+                "id='" + id + '\'' +
                 ", action='" + action + '\'' +
                 ", tradeDate='" + tradeDate + '\'' +
                 ", settleDate='" + settleDate + '\'' +
@@ -229,30 +229,30 @@ public class ReconPOC {
             if (cacheMap.containsKey(execution.toKey())) {
                 CacheValue currentExecution = cacheMap.get(execution.toKey());
                 if ("N".equalsIgnoreCase(execution.getAction())) {
-                    if (currentExecution.getExecIdAndCorrespondingQtyMap().containsKey(execution.getTradeID())) {
-                        System.out.println(execution.getTradeID()+" is already present in the map so ignoring");
+                    if (currentExecution.getExecIdAndCorrespondingQtyMap().containsKey(execution.getId())) {
+                        System.out.println(execution.getId()+" is already present in the map so ignoring");
                         continue;
                     }
                     else
                     {
                         //Different execution
-                        currentExecution.getExecIdAndCorrespondingQtyMap().put(execution.getTradeID(), execution.getQty());
+                        currentExecution.getExecIdAndCorrespondingQtyMap().put(execution.getId(), execution.getQty());
                         int totalQty=currentExecution.getExecutionQuantity()+execution.getQty();
                         currentExecution.setExecutionQuantity(totalQty);
                     }
                 }
                 if ("C".equalsIgnoreCase(execution.getAction())) {
-                    if (currentExecution.getExecIdAndCorrespondingQtyMap().containsKey(execution.getTradeID())) {
+                    if (currentExecution.getExecIdAndCorrespondingQtyMap().containsKey(execution.getId())) {
                         int totalQty=currentExecution.getExecutionQuantity()-execution.getQty();
                         currentExecution.setExecutionQuantity(totalQty);
-                        currentExecution.getExecIdAndCorrespondingQtyMap().remove(execution.getTradeID());
-                        currentExecution.getCxlExecIdAndCorrespondingQtyMap().put(execution.getTradeID(), execution.getQty());
+                        currentExecution.getExecIdAndCorrespondingQtyMap().remove(execution.getId());
+                        currentExecution.getCxlExecIdAndCorrespondingQtyMap().put(execution.getId(), execution.getQty());
 
                     }
                 }
                 if ("A".equalsIgnoreCase(execution.getAction())) {
-                    if (currentExecution.getExecIdAndCorrespondingQtyMap().containsKey(execution.getTradeID())) {
-                        currentExecution.getExecIdAndCorrespondingQtyMap().put(execution.getTradeID(), execution.getQty());
+                    if (currentExecution.getExecIdAndCorrespondingQtyMap().containsKey(execution.getId())) {
+                        currentExecution.getExecIdAndCorrespondingQtyMap().put(execution.getId(), execution.getQty());
                         int totalQty = 0;
                         for (int qty : currentExecution.getExecIdAndCorrespondingQtyMap().values()) {
                             totalQty += qty;
@@ -268,7 +268,7 @@ public class ReconPOC {
                     
                     currentExecution.setExecutionQuantity(execution.getQty());
                 }
-                currentExecution.getExecIdAndCorrespondingQtyMap().put(execution.getTradeID(), execution.getQty());
+                currentExecution.getExecIdAndCorrespondingQtyMap().put(execution.getId(), execution.getQty());
                 cacheMap.put(execution.toKey(), currentExecution);
             }
         }
@@ -279,30 +279,30 @@ public class ReconPOC {
             if (cacheMap.containsKey(alloc.toKey())) {
                 CacheValue currentAlloc = cacheMap.get(alloc.toKey());
                 if ("N".equalsIgnoreCase(alloc.getAction())) {
-                    if (currentAlloc.getAllocIdAndCorrespondingQtyMap().containsKey(alloc.getTradeID())) {
-                        System.out.println(alloc.getTradeID()+" is already present in the map so ignoring");
+                    if (currentAlloc.getAllocIdAndCorrespondingQtyMap().containsKey(alloc.getId())) {
+                        System.out.println(alloc.getId()+" is already present in the map so ignoring");
                         continue;
                     }
                     else
                     {
                         //Different alloc
-                        currentAlloc.getAllocIdAndCorrespondingQtyMap().put(alloc.getTradeID(), alloc.getQty());
+                        currentAlloc.getAllocIdAndCorrespondingQtyMap().put(alloc.getId(), alloc.getQty());
                         int totalQty=currentAlloc.getAllocationQuantity()+alloc.getQty();
                         currentAlloc.setAllocationQuantity(totalQty);
                     }
                 }
                 if ("C".equalsIgnoreCase(alloc.getAction())) {
-                    if (currentAlloc.getAllocIdAndCorrespondingQtyMap().containsKey(alloc.getTradeID())) {
+                    if (currentAlloc.getAllocIdAndCorrespondingQtyMap().containsKey(alloc.getId())) {
                         int totalQty=currentAlloc.getAllocationQuantity()-alloc.getQty();
                         currentAlloc.setAllocationQuantity(totalQty);
-                        currentAlloc.getAllocIdAndCorrespondingQtyMap().remove(alloc.getTradeID());
-                        currentAlloc.getCxlAllocIdAndCorrespondingQtyMap().put(alloc.getTradeID(), alloc.getQty());
+                        currentAlloc.getAllocIdAndCorrespondingQtyMap().remove(alloc.getId());
+                        currentAlloc.getCxlAllocIdAndCorrespondingQtyMap().put(alloc.getId(), alloc.getQty());
 
                     }
                 }
                 if ("A".equalsIgnoreCase(alloc.getAction())) {
-                    if (currentAlloc.getAllocIdAndCorrespondingQtyMap().containsKey(alloc.getTradeID())) {
-                        currentAlloc.getAllocIdAndCorrespondingQtyMap().put(alloc.getTradeID(), alloc.getQty());
+                    if (currentAlloc.getAllocIdAndCorrespondingQtyMap().containsKey(alloc.getId())) {
+                        currentAlloc.getAllocIdAndCorrespondingQtyMap().put(alloc.getId(), alloc.getQty());
                         int totalQty = 0;
                         for (int qty : currentAlloc.getAllocIdAndCorrespondingQtyMap().values()) {
                             totalQty += qty;
@@ -318,7 +318,7 @@ public class ReconPOC {
 
                     currentAlloc.setAllocationQuantity(alloc.getQty());
                 }
-                currentAlloc.getAllocIdAndCorrespondingQtyMap().put(alloc.getTradeID(), alloc.getQty());
+                currentAlloc.getAllocIdAndCorrespondingQtyMap().put(alloc.getId(), alloc.getQty());
                 cacheMap.put(alloc.toKey(), currentAlloc);
             }
         }
