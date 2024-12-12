@@ -220,7 +220,7 @@ class Trade {
     }
 }
 
-public class NSCCFileReader {
+public class ReconPOC {
     
 
     public static void loadCacheAndCalculateExecutionPositions(List<Trade> executions, Map<String, CacheValue> cacheMap) {
