@@ -1,0 +1,58 @@
+<cache-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns="http://xmlns.oracle.com/coherence/coherence-cache-config"
+              xsi:schemaLocation="http://xmlns.oracle.com/coherence/coherence-cache-config coherence-cache-config.xsd">
+
+    <!--
+    Add this on server side and start process
+
+
+coherence-cache-config.xml
+[vivek@localhost bin]$ vi cache-server.sh
+$JAVAEXEC -server -showversion $JAVA_OPTS -cp "$COHERENCE_HOME/lib/coherence.jar" -Dcoherence.cacheconfig=/home/vivek/Oracle/Middleware/Oracle_Home/coherence/bin/coherence-cache-config.xml com.tangosol.net.DefaultCacheServer "$@"
+[vivek@localhost bin]$ pwd
+/home/vivek/Oracle/Middleware/Oracle_Home/coherence/bin
+
+[vivek@localhost bin]$ pwd
+/home/vivek/Oracle/Middleware/Oracle_Home/coherence/bin
+
+
+    -->
+    <!-- Map all caches to the distributed cache scheme -->
+    <caching-scheme-mapping>
+        <cache-mapping>
+            <cache-name>*</cache-name>
+            <scheme-name>distributed-cache</scheme-name>
+        </cache-mapping>
+    </caching-scheme-mapping>
+
+
+    <caching-schemes>
+        <distributed-scheme>
+            <scheme-name>distributed-cache</scheme-name>
+            <service-name>DistributedCache</service-name>
+            <backing-map-scheme>
+                <local-scheme/>
+            </backing-map-scheme>
+        </distributed-scheme>
+        <proxy-scheme>
+            <service-name>ExtendTcpProxyService</service-name>
+            <acceptor-config>
+                <tcp-acceptor>
+                    <local-address>
+                        <address>10.0.0.77</address>
+                        <port>9099</port>
+                    </local-address>
+                </tcp-acceptor>
+            </acceptor-config>
+            <proxy-config>
+                <cache-service-proxy>
+                    <enabled>true</enabled>
+                </cache-service-proxy>
+                <invocation-service-proxy>
+                    <enabled>true</enabled>
+                </invocation-service-proxy>
+            </proxy-config>
+            <autostart>true</autostart>
+        </proxy-scheme>
+    </caching-schemes>
+</cache-config>
