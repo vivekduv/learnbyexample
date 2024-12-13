@@ -1,5 +1,10 @@
 package org.learnbyexample;
 
+import com.hazelcast.client.HazelcastClient;
+import com.hazelcast.client.config.ClientConfig;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.map.IMap;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 class ReconCache {
-    private Map<String, CacheValue> reconCacheMap;
+    private final Map<String, CacheValue> reconCacheMap;
     public ReconCache() {
         this.reconCacheMap = new HashMap<>();
     }
@@ -328,6 +333,15 @@ public class ReconPOC {
         String nsccFile = "/Users/vivek/IdeaProjects/learnbyexample/kafka/src/main/resources/nscc.txt";
         String allocFile = "/Users/vivek/IdeaProjects/learnbyexample/kafka/src/main/resources/alloc.txt";
 
+        ClientConfig clientConfig = new ClientConfig();
+        clientConfig.getNetworkConfig().addAddress("10.0.0.77:5701"); // Replace with your cluster address
+
+        // Create a Hazelcast Client Instance
+        HazelcastInstance hazelcastClient = HazelcastClient.newHazelcastClient(clientConfig);
+
+        // Access a distributed map
+        IMap<String, CacheValue> map = hazelcastClient.getMap("my-distributed-map1");
+
         List<Trade> executions = getTrades(nsccFile);
       List<Trade> allocations = getTrades(allocFile);
 
@@ -339,6 +353,7 @@ public class ReconPOC {
         loadCacheAndCalculateAllocPositions(allocations,dbReconCache.getReconCacheMap());
 
         List<ReconResult> reconResults=new ArrayList<>();
+        map.putAll(dbReconCache.getReconCacheMap());
         for (Map.Entry<String, CacheValue> entry : dbReconCache.getReconCacheMap().entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue().toString();
