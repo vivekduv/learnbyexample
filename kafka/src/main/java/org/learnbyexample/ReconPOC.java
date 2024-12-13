@@ -4,8 +4,10 @@ import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
+import redis.clients.jedis.Jedis;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,13 +22,19 @@ class ReconCache {
         return reconCacheMap;
     }
 
+    @Override
+    public String toString() {
+        return "ReconCache{" +
+                "reconCacheMap=" + reconCacheMap +
+                '}';
+    }
 }
 class ReconResult {
     String reconId;
     String key;
-    int execQty;
-    int allocQty;
-    int diffQty;
+    Integer execQty;
+    Integer allocQty;
+    Integer diffQty;
     private String statusText;
     public String getStatusText() {
         return statusText;
@@ -35,19 +43,19 @@ class ReconResult {
         this.statusText = statusText;
     }
 
-    public ReconResult(String reconId, String key, int execQty, int allocQty, int diffQty) {
+    public ReconResult(String reconId, String key, Integer execQty, Integer allocQty, Integer diffQty) {
         this.reconId = reconId;
         this.key = key;
         this.execQty = execQty;
         this.allocQty = allocQty;
         this.diffQty = diffQty;
     }
-    public ReconResult(String reconId, String key, int execQty, int allocQty) {
+    public ReconResult(String reconId, String key, Integer execQty, Integer allocQty) {
         this.reconId = reconId;
         this.key = key;
         this.execQty = execQty;
         this.allocQty = allocQty;
-        this.diffQty=allocQty-execQty;
+        this.diffQty= (Integer) (allocQty-execQty);
         if (diffQty<0) {
             statusText="Long on Street";
         }
@@ -72,8 +80,8 @@ class ReconResult {
     }
 }
 class CacheValue {
-    private int executionQuantity;
-    private int allocationQuantity;
+    private Integer executionQuantity;
+    private Integer allocationQuantity;
 
     private Map<String, Integer> execIdAndCorrespondingQtyMap=new HashMap<>();
     private Map<String, Integer> cxlExecIdAndCorrespondingQtyMap=new HashMap<>();;
@@ -81,19 +89,19 @@ class CacheValue {
     private Map<String, Integer> cxlAllocIdAndCorrespondingQtyMap=new HashMap<>();;
 
 
-    public int getExecutionQuantity() {
+    public Integer getExecutionQuantity() {
         return executionQuantity;
     }
 
-    public void setExecutionQuantity(int executionQuantity) {
+    public void setExecutionQuantity(Integer executionQuantity) {
         this.executionQuantity = executionQuantity;
     }
 
-    public int getAllocationQuantity() {
+    public Integer getAllocationQuantity() {
         return allocationQuantity;
     }
 
-    public void setAllocationQuantity(int allocationQuantity) {
+    public void setAllocationQuantity(Integer allocationQuantity) {
         this.allocationQuantity = allocationQuantity;
     }
 
@@ -149,11 +157,11 @@ class Trade {
     private String managerCode;
     private String symbol;
     private String side;
-    private int qty;
+    private Integer qty;
 
     // Constructor
     public Trade(String id, String action, String tradeDate, String settleDate,
-                 String managerCode, String symbol, String side, int qty) {
+                 String managerCode, String symbol, String side, Integer qty) {
         this.id = id;
         this.action = action;
         this.tradeDate = tradeDate;
@@ -193,7 +201,7 @@ class Trade {
         return side;
     }
 
-    public int getQty() {
+    public Integer getQty() {
         return qty;
     }
 
@@ -242,13 +250,13 @@ public class ReconPOC {
                     {
                         //Different execution
                         currentExecution.getExecIdAndCorrespondingQtyMap().put(execution.getId(), execution.getQty());
-                        int totalQty=currentExecution.getExecutionQuantity()+execution.getQty();
+                        Integer totalQty= (Integer) (currentExecution.getExecutionQuantity()+execution.getQty());
                         currentExecution.setExecutionQuantity(totalQty);
                     }
                 }
                 if ("C".equalsIgnoreCase(execution.getAction())) {
                     if (currentExecution.getExecIdAndCorrespondingQtyMap().containsKey(execution.getId())) {
-                        int totalQty=currentExecution.getExecutionQuantity()-execution.getQty();
+                        Integer totalQty= (Integer) (currentExecution.getExecutionQuantity()-execution.getQty());
                         currentExecution.setExecutionQuantity(totalQty);
                         currentExecution.getExecIdAndCorrespondingQtyMap().remove(execution.getId());
                         currentExecution.getCxlExecIdAndCorrespondingQtyMap().put(execution.getId(), execution.getQty());
@@ -258,8 +266,8 @@ public class ReconPOC {
                 if ("A".equalsIgnoreCase(execution.getAction())) {
                     if (currentExecution.getExecIdAndCorrespondingQtyMap().containsKey(execution.getId())) {
                         currentExecution.getExecIdAndCorrespondingQtyMap().put(execution.getId(), execution.getQty());
-                        int totalQty = 0;
-                        for (int qty : currentExecution.getExecIdAndCorrespondingQtyMap().values()) {
+                        Integer totalQty = (Integer) 0;
+                        for (Integer qty : currentExecution.getExecIdAndCorrespondingQtyMap().values()) {
                             totalQty += qty;
                         }
                         currentExecution.setExecutionQuantity(totalQty);
@@ -292,13 +300,13 @@ public class ReconPOC {
                     {
                         //Different alloc
                         currentAlloc.getAllocIdAndCorrespondingQtyMap().put(alloc.getId(), alloc.getQty());
-                        int totalQty=currentAlloc.getAllocationQuantity()+alloc.getQty();
+                        Integer totalQty= (Integer) (currentAlloc.getAllocationQuantity()+alloc.getQty());
                         currentAlloc.setAllocationQuantity(totalQty);
                     }
                 }
                 if ("C".equalsIgnoreCase(alloc.getAction())) {
                     if (currentAlloc.getAllocIdAndCorrespondingQtyMap().containsKey(alloc.getId())) {
-                        int totalQty=currentAlloc.getAllocationQuantity()-alloc.getQty();
+                        Integer totalQty= (Integer) (currentAlloc.getAllocationQuantity()-alloc.getQty());
                         currentAlloc.setAllocationQuantity(totalQty);
                         currentAlloc.getAllocIdAndCorrespondingQtyMap().remove(alloc.getId());
                         currentAlloc.getCxlAllocIdAndCorrespondingQtyMap().put(alloc.getId(), alloc.getQty());
@@ -308,8 +316,8 @@ public class ReconPOC {
                 if ("A".equalsIgnoreCase(alloc.getAction())) {
                     if (currentAlloc.getAllocIdAndCorrespondingQtyMap().containsKey(alloc.getId())) {
                         currentAlloc.getAllocIdAndCorrespondingQtyMap().put(alloc.getId(), alloc.getQty());
-                        int totalQty = 0;
-                        for (int qty : currentAlloc.getAllocIdAndCorrespondingQtyMap().values()) {
+                        Integer totalQty = (Integer) 0;
+                        for (Integer qty : currentAlloc.getAllocIdAndCorrespondingQtyMap().values()) {
                             totalQty += qty;
                         }
                         currentAlloc.setAllocationQuantity(totalQty);
@@ -333,14 +341,20 @@ public class ReconPOC {
         String nsccFile = "/Users/vivek/IdeaProjects/learnbyexample/kafka/src/main/resources/nscc.txt";
         String allocFile = "/Users/vivek/IdeaProjects/learnbyexample/kafka/src/main/resources/alloc.txt";
 
-        ClientConfig clientConfig = new ClientConfig();
-        clientConfig.getNetworkConfig().addAddress("10.0.0.77:5701"); // Replace with your cluster address
+        String redisHost = "10.0.0.77";
+        int redisPort = 6379;
+
+        //  Jedis jedis = new Jedis(redisHost, redisPort);
+        //jedis.connect();
+
+        //ClientConfig clientConfig = new ClientConfig();
+       // clientConfig.getNetworkConfig().addAddress("10.0.0.77:5701"); // Replace with your cluster address
 
         // Create a Hazelcast Client Instance
-        HazelcastInstance hazelcastClient = HazelcastClient.newHazelcastClient(clientConfig);
+      //  HazelcastInstance hazelcastClient = HazelcastClient.newHazelcastClient(clientConfig);
 
         // Access a distributed map
-        IMap<String, CacheValue> map = hazelcastClient.getMap("my-distributed-map1");
+      //  IMap<String, CacheValue> map = hazelcastClient.getMap("my-distributed-map1");
 
         List<Trade> executions = getTrades(nsccFile);
       List<Trade> allocations = getTrades(allocFile);
@@ -349,11 +363,16 @@ public class ReconPOC {
         ReconCache dbReconCache=new ReconCache();
         ReconCache realTimeReconCache=new ReconCache();
 
-        loadCacheAndCalculateExecutionPositions(executions,dbReconCache.getReconCacheMap());
-        loadCacheAndCalculateAllocPositions(allocations,dbReconCache.getReconCacheMap());
+      //  loadCacheAndCalculateExecutionPositions(executions,dbReconCache.getReconCacheMap());
+      //  loadCacheAndCalculateAllocPositions(allocations,dbReconCache.getReconCacheMap());
 
         List<ReconResult> reconResults=new ArrayList<>();
-        map.putAll(dbReconCache.getReconCacheMap());
+       // map.putAll(dbReconCache.getReconCacheMap());
+     //   jedis.set("reconCache".getBytes(StandardCharsets.UTF_8),dbReconCache.toString().getBytes(StandardCharsets.UTF_8));
+      //  byte[] bytes = jedis.get("reconCache".getBytes(StandardCharsets.UTF_8));
+      //  String reconCacheString=new String(bytes,StandardCharsets.UTF_8);
+      //  System.out.println("reconCacheString: "+reconCacheString);
+
         for (Map.Entry<String, CacheValue> entry : dbReconCache.getReconCacheMap().entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue().toString();
@@ -387,7 +406,7 @@ public class ReconPOC {
                 String managerCode = parts[4];
                 String symbol = parts[5];
                 String side = parts[6];
-                int qty = Integer.parseInt(parts[7]);
+                Integer qty = (Integer) Integer.parseInt(parts[7]);
 
                 // Create an Execution object and add it to the list
                 Trade execution = new Trade(id, action, tradeDate, settleDate, managerCode, symbol, side, qty);
