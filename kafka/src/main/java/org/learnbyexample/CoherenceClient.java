@@ -10,6 +10,7 @@ public class CoherenceClient {
             // Ensure Coherence is correctly set up and available
             try {
 
+                System.setProperty("tangosol.coherence.cacheconfig", "coherence-operational-config.xml");
                 //distributed-cache
                 // Connect to the Coherence cluster
                 NamedCache<String, String> cache = CacheFactory.getCache("dist-extend");
@@ -18,8 +19,8 @@ public class CoherenceClient {
                 System.out.println("Connected to Coherence cache server.");
 
                 // Put a value in the cache
-                //cache.put("key1", "value1");
-              //  System.out.println("Added key1 -> value1 to the cache.");
+              cache.put("key1", "value1");
+               System.out.println("Added key1 -> value1 to the cache.");
 
                 // Retrieve the value
                 String value = cache.get("key1");
