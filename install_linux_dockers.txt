@@ -1,0 +1,85 @@
+Install docker on linux
+
+   sudo dnf update -y
+   sudo dnf config-manager --add-repo=https://download.docker.com/linux/rhel/docker-ce.repo
+   sudo dnf install -y yum-utils device-mapper-persistent-data lvm2
+   sudo dnf install -y docker-ce docker-ce-cli containerd.io
+   sudo systemctl start docker
+   sudo systemctl enable docker
+   sudo docker --version
+   sudo docker run hello-world
+sudo usermod -aG docker $USER
+
+
+Kill docker desktop
+
+Install oracle
+docker login container-registry.oracle.com --username vivekduv.shop@gmail.com --password Killer123$
+
+Start docker desktop
+
+docker pull container-registry.oracle.com/database/enterprise:latest
+
+
+
+docker run -d --name orcl --memory=16g --memory-swap=18g container-registry.oracle.com/database/enterprise:latest
+
+
+docker exec orcl ./setPassword.sh killer123killer123
+
+
+docker run -d --name orcl1 -p 1521:1521 -p 5500:5500 -e ORACLE_SID=ORCLCDB -e ORACLE_PDB=ORCLPDB1 -e ORACLE_PWD=killer123killer123 container-registry.oracle.com/database/enterprise:latest
+
+
+
+docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=Killer123@@" -p 1433:1433 -d --name mssql1 --hostname mssql1  mcr.microsoft.com/mssql/server:latest
+
+docker run -d --name mongodb1 	-p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=secret mongo
+
+export HNAME=192.168.0.201
+docker run -d --name zookeeper1 -e TZ=UTC -e ZOOKEEPER_HOST=$HNAME -p 2181:2181 ubuntu/zookeeper:latest
+
+
+docker run -d --name kafka1 --hostname=$HNAME --env=ZOOKEEPER_HOST=$HNAME --env=ZOOKEEPER_PORT=2181 --env=TZ=UTC --env=PATH=/opt/kafka/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin -p 9092:9092 --runtime=runc -d ubuntu/kafka:latest
+
+
+docker run -d -p 8080:8080 -p 55554:55555 -p 8008:8008 -p 1883:1883 -p 8000:8000 -p 5672:5672 -p 9000:9000 -p 2222:2222 --shm-size=2g --env username_admin_globalaccesslevel=admin --env username_admin_password=admin --name=solace1 solace/solace-pubsub-standard
+
+Solace admin console
+http://192.168.0.201:8080/#/login
+admin/admin
+
+
+
+docker run -d --name postgres1 --env=POSTGRES_PASSWORD=mysecretpassword  --network=bridge  -p 5432:5432 postgres
+
+docker pull container-registry.oracle.com/middleware/coherence-ce:22.06.10
+docker run -d --name coherence1 -p 8080:8080 -p 7574:7574 container-registry.oracle.com/middleware/coherence-ce:22.06.10
+
+curl -X POST -H "Content-Type: application/json" -d '{"queueName":"solace/try/this/topic", "msgVpnName":"default"}' http://localhost:8080/SEMP/v2/config/msgVpns/default/queues
+
+
+curl -X POST -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -d '{"queueName":"solace/try/this/topic", "msgVpnName":"default"}' http://localhost:8080/SEMP/v2/config/msgVpns/default/queues
+
+docker run --name redis1 -d -p 6379:6379 -v redis-data:/home/vivek/redisdata redis --save "30 1"
+
+docker run -d --name redisinsight -p 5540:5540 redis/redisinsight:latest -v redisinsight:/data
+http://192.168.0.201:5540/
+
+export HNAME=192.168.22.128
+docker run -d --name hazelcast1 -e HZ_NETWORK_PUBLICADDRESS=$HNAME:5701 -p 5701:5701 hazelcast/hazelcast
+docker run -d --name hazelcast2  -e HZ_NETWORK_PUBLICADDRESS=$HNAME:5702 -p 5702:5701  hazelcast/hazelcast
+**note -p 5702:5701 (this establishes cluster)
+
+docker run --rm  --name hazelcastmangament1 -p 8080:8080 hazelcast/management-center
+http://192.168.0.201:8080/
+
+
+
+KAFKA_CLUSTER_ID="$(bin/kafka-storage.sh random-uuid)"
+bin/kafka-storage.sh format --standalone -t $KAFKA_CLUSTER_ID -c config/kraft/reconfig-server.properties
+bin/kafka-server-start.sh config/kraft/reconfig-server.properties
+
+Change
+advertised.listeners=PLAINTEXT://10.0.0.77:9092,CONTROLLER://10.0.0.77:9093
+controller.quorum.bootstrap.servers=10.0.0.77:9093
