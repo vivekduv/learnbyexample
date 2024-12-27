@@ -54,7 +54,7 @@ admin/admin
 docker run -d --name postgres1 --env=POSTGRES_PASSWORD=mysecretpassword  --network=bridge  -p 5432:5432 postgres
 
 docker pull container-registry.oracle.com/middleware/coherence-ce:22.06.10
-docker run -d --name coherence1 -p 8080:8080 -p 7574:7574 container-registry.oracle.com/middleware/coherence-ce:22.06.10
+docker run -d --name coherence1 -p 8080:8080 -p 20000:20000 -p 20001:20001 container-registry.oracle.com/middleware/coherence-ce:22.06.10
 
 curl -X POST -H "Content-Type: application/json" -d '{"queueName":"solace/try/this/topic", "msgVpnName":"default"}' http://localhost:8080/SEMP/v2/config/msgVpns/default/queues
 

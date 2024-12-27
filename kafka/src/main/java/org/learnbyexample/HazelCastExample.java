@@ -8,7 +8,7 @@ public class HazelCastExample {
     public static void main(String[] args) {
         // Configure the Hazelcast Client
         ClientConfig clientConfig = new ClientConfig();
-        clientConfig.getNetworkConfig().addAddress("10.0.0.77:5701"); // Replace with your cluster address
+        clientConfig.getNetworkConfig().addAddress("192.168.22.128"); // Replace with your cluster address
 
         // Create a Hazelcast Client Instance
         HazelcastInstance hazelcastClient = HazelcastClient.newHazelcastClient(clientConfig);

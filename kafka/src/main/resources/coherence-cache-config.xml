@@ -39,8 +39,8 @@ $JAVAEXEC -server -showversion $JAVA_OPTS -cp "$COHERENCE_HOME/lib/coherence.jar
             <acceptor-config>
                 <tcp-acceptor>
                     <local-address>
-                        <address>10.0.0.77</address>
-                        <port>9099</port>
+                        <address>192.168.22.128</address>
+                        <port>7574</port>
                     </local-address>
                 </tcp-acceptor>
             </acceptor-config>
