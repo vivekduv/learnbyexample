@@ -15,6 +15,7 @@
         <module>corejava</module>
         <module>model</module>
         <module>quickfixj</module>
+        <module>cache</module>
     </modules>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -32,20 +33,29 @@
         <jaxb-api.version>2.3.1</jaxb-api.version>
         <jaxb-core.version>2.3.0</jaxb-core.version>
         <jasypt.version>1.9.3</jasypt.version>
+        <coherence.version>22.06</coherence.version>
+        <redis.version>4.3.1</redis.version>
+        <hazelcast.version>5.4.0</hazelcast.version>
     </properties>
 
     <dependencies>
          <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
-            <version>5.4.0</version>
+            <version>${hazelcast.version}</version>
         </dependency>
 
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
-            <version>4.3.1</version>
+            <version>${redis.version}</version>
         </dependency>
+
+            <dependency>
+                <groupId>com.oracle.coherence.ce</groupId>
+                <artifactId>coherence</artifactId>
+                <version>${coherence.version}</version>
+            </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
