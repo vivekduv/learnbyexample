@@ -18,7 +18,7 @@
                 <tcp-initiator>
                     <remote-addresses>
                         <socket-address>
-                            <address>192.168.22.128</address> <!-- Your Linux VM address -->
+                            <address>localhost</address> <!-- Your Linux VM address -->
                             <port>20000</port> <!-- Port for ExtendTcpCacheService -->
                         </socket-address>
                     </remote-addresses>
