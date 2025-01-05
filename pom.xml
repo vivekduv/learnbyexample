@@ -6,7 +6,7 @@
     <groupId>org.learnbyexample</groupId>
     <artifactId>learnbyexample</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <modules>
         <module>kafka</module>
         <module>camel</module>
@@ -22,7 +22,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-
+        <parent.project.version>1.0</parent.project.version>
         <org.springframework.version>5.3.25</org.springframework.version>
         <camel.version>3.20.2</camel.version>
         <quickfixj.version>2.3.1</quickfixj.version>
