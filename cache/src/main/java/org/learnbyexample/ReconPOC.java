@@ -1,6 +1,8 @@
 package org.learnbyexample;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,20 +10,21 @@ import java.util.Map;
 
 class ReconCache {
     private final Map<String, CacheValue> reconCacheMap;
+
     public ReconCache() {
         this.reconCacheMap = new HashMap<>();
     }
+
     public Map<String, CacheValue> getReconCacheMap() {
         return reconCacheMap;
     }
 
     @Override
     public String toString() {
-        return "ReconCache{" +
-                "reconCacheMap=" + reconCacheMap +
-                '}';
+        return "ReconCache{" + "reconCacheMap=" + reconCacheMap + '}';
     }
 }
+
 class ReconResult {
     String reconId;
     String key;
@@ -29,12 +32,6 @@ class ReconResult {
     Integer allocQty;
     Integer diffQty;
     private String statusText;
-    public String getStatusText() {
-        return statusText;
-    }
-    public void setStatusText(String statusText) {
-        this.statusText = statusText;
-    }
 
     public ReconResult(String reconId, String key, Integer execQty, Integer allocQty, Integer diffQty) {
         this.reconId = reconId;
@@ -43,43 +40,44 @@ class ReconResult {
         this.allocQty = allocQty;
         this.diffQty = diffQty;
     }
+
     public ReconResult(String reconId, String key, Integer execQty, Integer allocQty) {
         this.reconId = reconId;
         this.key = key;
         this.execQty = execQty;
         this.allocQty = allocQty;
-        this.diffQty= (Integer) (allocQty-execQty);
-        if (diffQty<0) {
-            statusText="Long on Street";
+        this.diffQty = (allocQty - execQty);
+        if (diffQty < 0) {
+            statusText = "Long on Street";
+        } else if (diffQty > 0) {
+            statusText = "Short on Street";
+        } else {
+            statusText = "Match!!!";
         }
-        else if (diffQty>0) {
-            statusText="Short on Street";
-        }
-        else {
-            statusText="Match!!!";
-        }
+    }
+
+    public String getStatusText() {
+        return statusText;
+    }
+
+    public void setStatusText(String statusText) {
+        this.statusText = statusText;
     }
 
     @Override
     public String toString() {
-        return "ReconResult{" +
-                "reconId='" + reconId + '\'' +
-                ", key='" + key + '\'' +
-                ", execQty=" + execQty +
-                ", allocQty=" + allocQty +
-                ", diffQty=" + diffQty +
-                ", status=" + statusText+
-                '}';
+        return "ReconResult{" + "reconId='" + reconId + '\'' + ", key='" + key + '\'' + ", execQty=" + execQty + ", allocQty=" + allocQty + ", diffQty=" + diffQty + ", status=" + statusText + '}';
     }
 }
-class CacheValue {
-    private Integer executionQuantity;
-    private Integer allocationQuantity;
 
-    private Map<String, Integer> execIdAndCorrespondingQtyMap=new HashMap<>();
-    private Map<String, Integer> cxlExecIdAndCorrespondingQtyMap=new HashMap<>();;
-    private Map<String, Integer> allocIdAndCorrespondingQtyMap=new HashMap<>();;
-    private Map<String, Integer> cxlAllocIdAndCorrespondingQtyMap=new HashMap<>();;
+class CacheValue {
+    private Integer executionQuantity = 0;
+    private Integer allocationQuantity = 0;
+
+    private Map<String, Integer> execIdAndCorrespondingQtyMap = new HashMap<>();
+    private Map<String, Integer> cxlExecIdAndCorrespondingQtyMap = new HashMap<>();
+    private Map<String, Integer> allocIdAndCorrespondingQtyMap = new HashMap<>();
+    private Map<String, Integer> cxlAllocIdAndCorrespondingQtyMap = new HashMap<>();
 
 
     public Integer getExecutionQuantity() {
@@ -132,29 +130,22 @@ class CacheValue {
 
     @Override
     public String toString() {
-        return "CacheValue{" +
-                "executionQuantity=" + executionQuantity +
-                ", allocationQuantity=" + allocationQuantity +
-                ", execIdAndCorrespondingQtyMap=" + execIdAndCorrespondingQtyMap +
-                ", cxlExecIdAndCorrespondingQtyMap=" + cxlExecIdAndCorrespondingQtyMap +
-                ", allocIdAndCorrespondingQtyMap=" + allocIdAndCorrespondingQtyMap +
-                ", cxlAllocIdAndCorrespondingQtyMap=" + cxlAllocIdAndCorrespondingQtyMap +
-                '}';
+        return "CacheValue{" + "executionQuantity=" + executionQuantity + ", allocationQuantity=" + allocationQuantity + ", execIdAndCorrespondingQtyMap=" + execIdAndCorrespondingQtyMap + ", cxlExecIdAndCorrespondingQtyMap=" + cxlExecIdAndCorrespondingQtyMap + ", allocIdAndCorrespondingQtyMap=" + allocIdAndCorrespondingQtyMap + ", cxlAllocIdAndCorrespondingQtyMap=" + cxlAllocIdAndCorrespondingQtyMap + '}';
     }
 }
+
 class Trade {
-    private String id;
-    private String action;
-    private String tradeDate;
-    private String settleDate;
-    private String managerCode;
-    private String symbol;
-    private String side;
-    private Integer qty;
+    private final String id;
+    private final String action;
+    private final String tradeDate;
+    private final String settleDate;
+    private final String managerCode;
+    private final String symbol;
+    private final String side;
+    private final Integer qty;
 
     // Constructor
-    public Trade(String id, String action, String tradeDate, String settleDate,
-                 String managerCode, String symbol, String side, Integer qty) {
+    public Trade(String id, String action, String tradeDate, String settleDate, String managerCode, String symbol, String side, Integer qty) {
         this.id = id;
         this.action = action;
         this.tradeDate = tradeDate;
@@ -200,34 +191,17 @@ class Trade {
 
     @Override
     public String toString() {
-        return "Trade{" +
-                "id='" + id + '\'' +
-                ", action='" + action + '\'' +
-                ", tradeDate='" + tradeDate + '\'' +
-                ", settleDate='" + settleDate + '\'' +
-                ", managerCode='" + managerCode + '\'' +
-                ", symbol='" + symbol + '\'' +
-                ", side='" + side + '\'' +
-                ", qty=" + qty +
-                '}';
+        return "Trade{" + "id='" + id + '\'' + ", action='" + action + '\'' + ", tradeDate='" + tradeDate + '\'' + ", settleDate='" + settleDate + '\'' + ", managerCode='" + managerCode + '\'' + ", symbol='" + symbol + '\'' + ", side='" + side + '\'' + ", qty=" + qty + '}';
     }
 
     public String toKey() {
 
-        return symbol +
-                "|" +
-                tradeDate +
-                "|" +
-                settleDate +
-                "|" +
-                managerCode +
-                "|" +
-                side;
+        return symbol + "|" + tradeDate + "|" + settleDate + "|" + managerCode + "|" + side;
     }
 }
 
 public class ReconPOC {
-    
+
 
     public static void loadCacheAndCalculateExecutionPositions(List<Trade> executions, Map<String, CacheValue> cacheMap) {
         for (Trade execution : executions) {
@@ -236,20 +210,18 @@ public class ReconPOC {
                 CacheValue currentExecution = cacheMap.get(execution.toKey());
                 if ("N".equalsIgnoreCase(execution.getAction())) {
                     if (currentExecution.getExecIdAndCorrespondingQtyMap().containsKey(execution.getId())) {
-                        System.out.println(execution.getId()+" is already present in the map so ignoring");
+                        System.out.println(execution.getId() + " is already present in the map so ignoring");
                         continue;
-                    }
-                    else
-                    {
+                    } else {
                         //Different execution
                         currentExecution.getExecIdAndCorrespondingQtyMap().put(execution.getId(), execution.getQty());
-                        Integer totalQty= (Integer) (currentExecution.getExecutionQuantity()+execution.getQty());
+                        Integer totalQty = currentExecution.getExecutionQuantity() + execution.getQty();
                         currentExecution.setExecutionQuantity(totalQty);
                     }
                 }
                 if ("C".equalsIgnoreCase(execution.getAction())) {
                     if (currentExecution.getExecIdAndCorrespondingQtyMap().containsKey(execution.getId())) {
-                        Integer totalQty= (Integer) (currentExecution.getExecutionQuantity()-execution.getQty());
+                        Integer totalQty = currentExecution.getExecutionQuantity() - execution.getQty();
                         currentExecution.setExecutionQuantity(totalQty);
                         currentExecution.getExecIdAndCorrespondingQtyMap().remove(execution.getId());
                         currentExecution.getCxlExecIdAndCorrespondingQtyMap().put(execution.getId(), execution.getQty());
@@ -259,19 +231,18 @@ public class ReconPOC {
                 if ("A".equalsIgnoreCase(execution.getAction())) {
                     if (currentExecution.getExecIdAndCorrespondingQtyMap().containsKey(execution.getId())) {
                         currentExecution.getExecIdAndCorrespondingQtyMap().put(execution.getId(), execution.getQty());
-                        Integer totalQty = (Integer) 0;
+                        Integer totalQty = 0;
                         for (Integer qty : currentExecution.getExecIdAndCorrespondingQtyMap().values()) {
                             totalQty += qty;
                         }
                         currentExecution.setExecutionQuantity(totalQty);
                     }
                 }
-            }
-            else {
+            } else {
                 //New Key - first time
                 CacheValue currentExecution = new CacheValue();
                 if ("N".equalsIgnoreCase(execution.getAction())) {
-                    
+
                     currentExecution.setExecutionQuantity(execution.getQty());
                 }
                 currentExecution.getExecIdAndCorrespondingQtyMap().put(execution.getId(), execution.getQty());
@@ -279,6 +250,7 @@ public class ReconPOC {
             }
         }
     }
+
     public static void loadCacheAndCalculateAllocPositions(List<Trade> allocs, Map<String, CacheValue> cacheMap) {
         for (Trade alloc : allocs) {
 
@@ -286,20 +258,18 @@ public class ReconPOC {
                 CacheValue currentAlloc = cacheMap.get(alloc.toKey());
                 if ("N".equalsIgnoreCase(alloc.getAction())) {
                     if (currentAlloc.getAllocIdAndCorrespondingQtyMap().containsKey(alloc.getId())) {
-                        System.out.println(alloc.getId()+" is already present in the map so ignoring");
+                        System.out.println(alloc.getId() + " is already present in the map so ignoring");
                         continue;
-                    }
-                    else
-                    {
+                    } else {
                         //Different alloc
                         currentAlloc.getAllocIdAndCorrespondingQtyMap().put(alloc.getId(), alloc.getQty());
-                        Integer totalQty= (Integer) (currentAlloc.getAllocationQuantity()+alloc.getQty());
+                        Integer totalQty = currentAlloc.getAllocationQuantity() + alloc.getQty();
                         currentAlloc.setAllocationQuantity(totalQty);
                     }
                 }
                 if ("C".equalsIgnoreCase(alloc.getAction())) {
                     if (currentAlloc.getAllocIdAndCorrespondingQtyMap().containsKey(alloc.getId())) {
-                        Integer totalQty= (Integer) (currentAlloc.getAllocationQuantity()-alloc.getQty());
+                        Integer totalQty = currentAlloc.getAllocationQuantity() - alloc.getQty();
                         currentAlloc.setAllocationQuantity(totalQty);
                         currentAlloc.getAllocIdAndCorrespondingQtyMap().remove(alloc.getId());
                         currentAlloc.getCxlAllocIdAndCorrespondingQtyMap().put(alloc.getId(), alloc.getQty());
@@ -309,15 +279,14 @@ public class ReconPOC {
                 if ("A".equalsIgnoreCase(alloc.getAction())) {
                     if (currentAlloc.getAllocIdAndCorrespondingQtyMap().containsKey(alloc.getId())) {
                         currentAlloc.getAllocIdAndCorrespondingQtyMap().put(alloc.getId(), alloc.getQty());
-                        Integer totalQty = (Integer) 0;
+                        Integer totalQty = 0;
                         for (Integer qty : currentAlloc.getAllocIdAndCorrespondingQtyMap().values()) {
                             totalQty += qty;
                         }
                         currentAlloc.setAllocationQuantity(totalQty);
                     }
                 }
-            }
-            else {
+            } else {
                 //New Key - first time
                 CacheValue currentAlloc = new CacheValue();
                 if ("N".equalsIgnoreCase(alloc.getAction())) {
@@ -331,52 +300,49 @@ public class ReconPOC {
     }
 
     public static void main(String[] args) {
-        String nsccFile = "/Users/vivek/IdeaProjects/learnbyexample/kafka/src/main/resources/nscc.txt";
-        String allocFile = "/Users/vivek/IdeaProjects/learnbyexample/kafka/src/main/resources/alloc.txt";
-
-        String redisHost = "10.0.0.77";
-        int redisPort = 6379;
+        String nsccFile = "cache/src/main/resources/nscc.txt";
+        String allocFile = "cache/src/main/resources/alloc.txt";
+        //  String redisHost = "10.0.0.77";
+        //  int redisPort = 6379;
 
         //  Jedis jedis = new Jedis(redisHost, redisPort);
         //jedis.connect();
 
         //ClientConfig clientConfig = new ClientConfig();
-       // clientConfig.getNetworkConfig().addAddress("10.0.0.77:5701"); // Replace with your cluster address
+        // clientConfig.getNetworkConfig().addAddress("10.0.0.77:5701"); // Replace with your cluster address
 
         // Create a Hazelcast Client Instance
-      //  HazelcastInstance hazelcastClient = HazelcastClient.newHazelcastClient(clientConfig);
+        //  HazelcastInstance hazelcastClient = HazelcastClient.newHazelcastClient(clientConfig);
 
         // Access a distributed map
-      //  IMap<String, CacheValue> map = hazelcastClient.getMap("my-distributed-map1");
+        //  IMap<String, CacheValue> map = hazelcastClient.getMap("my-distributed-map1");
 
         List<Trade> executions = getTrades(nsccFile);
-      List<Trade> allocations = getTrades(allocFile);
+        List<Trade> allocations = getTrades(allocFile);
 
 
-        ReconCache dbReconCache=new ReconCache();
-        ReconCache realTimeReconCache=new ReconCache();
+        ReconCache dbReconCache = new ReconCache();
+        ReconCache realTimeReconCache = new ReconCache();
 
-      //  loadCacheAndCalculateExecutionPositions(executions,dbReconCache.getReconCacheMap());
-      //  loadCacheAndCalculateAllocPositions(allocations,dbReconCache.getReconCacheMap());
+        loadCacheAndCalculateExecutionPositions(executions, dbReconCache.getReconCacheMap());
+        loadCacheAndCalculateAllocPositions(allocations, dbReconCache.getReconCacheMap());
 
-        List<ReconResult> reconResults=new ArrayList<>();
-       // map.putAll(dbReconCache.getReconCacheMap());
-     //   jedis.set("reconCache".getBytes(StandardCharsets.UTF_8),dbReconCache.toString().getBytes(StandardCharsets.UTF_8));
-      //  byte[] bytes = jedis.get("reconCache".getBytes(StandardCharsets.UTF_8));
-      //  String reconCacheString=new String(bytes,StandardCharsets.UTF_8);
-      //  System.out.println("reconCacheString: "+reconCacheString);
+        List<ReconResult> reconResults = new ArrayList<>();
+        // map.putAll(dbReconCache.getReconCacheMap());
+        //   jedis.set("reconCache".getBytes(StandardCharsets.UTF_8),dbReconCache.toString().getBytes(StandardCharsets.UTF_8));
+        //  byte[] bytes = jedis.get("reconCache".getBytes(StandardCharsets.UTF_8));
+        //  String reconCacheString=new String(bytes,StandardCharsets.UTF_8);
+        //  System.out.println("reconCacheString: "+reconCacheString);
 
         for (Map.Entry<String, CacheValue> entry : dbReconCache.getReconCacheMap().entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue().toString();
+            System.out.println("key: " + key + " value: " + value);
 
-            ReconResult reconResult=new ReconResult("",
-                    entry.getKey(),
-                    entry.getValue().getExecutionQuantity(),
-                    entry.getValue().getAllocationQuantity()
-            );
+            ReconResult reconResult = new ReconResult("", entry.getKey(), entry.getValue().getExecutionQuantity(), entry.getValue().getAllocationQuantity());
 
-            System.out.println("reconResult: "+reconResult);
+            System.out.println("reconResult: " + reconResult);
+
 
         }
 
@@ -399,7 +365,7 @@ public class ReconPOC {
                 String managerCode = parts[4];
                 String symbol = parts[5];
                 String side = parts[6];
-                Integer qty = (Integer) Integer.parseInt(parts[7]);
+                Integer qty = Integer.parseInt(parts[7]);
 
                 // Create an Execution object and add it to the list
                 Trade execution = new Trade(id, action, tradeDate, settleDate, managerCode, symbol, side, qty);
