@@ -1,7 +1,6 @@
-version: '3.8'
 services:
   app:
     image: helloworldjava
     environment:
       JAVA_OPTS: "-Xmx512m -Dspring.profiles.active=prod"
-      APP_ARGS: "a1 a2"
+      APP_ARGS: "1a1ooooo 2a2llll"

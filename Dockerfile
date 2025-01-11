@@ -1,5 +1,6 @@
 # Use an official Java runtime as a parent image
 FROM openjdk:17-jdk-slim
+#FROM container-registry.oracle.com/java/jdk:17.0.13
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -12,4 +13,6 @@ COPY target/deploy/* /app/jars/
 
 # Define the command to run your program
 #CMD ["java", "-cp", "/app/jars/dockerk8s-1.0-SNAPSHOT.jar", "org.learnbyexample.HelloWorld"]
-CMD java -cp /app/jars/dockerk8s-1.0-SNAPSHOT.jar $JAVA_OPTS org.learnbyexample.HelloWorld $APP_ARGS
+CMD ["sh", "-c", "java -cp /app/jars/dockerk8s-1.0-SNAPSHOT.jar $JAVA_OPTS org.learnbyexample.HelloWorld $APP_ARGS"]
+
+#CMD java -cp /app/jars/dockerk8s-1.0-SNAPSHOT.jar $JAVA_OPTS org.learnbyexample.HelloWorld $APP_ARGS
