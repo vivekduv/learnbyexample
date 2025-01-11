@@ -11,4 +11,5 @@ COPY target/deploy/* /app/jars/
 #RUN javac org/learnbyexample/HelloWorld.java
 
 # Define the command to run your program
-CMD ["java", "-cp", "/app/jars/dockerk8s-1.0-SNAPSHOT.jar", "org.learnbyexample.HelloWorld"]
+#CMD ["java", "-cp", "/app/jars/dockerk8s-1.0-SNAPSHOT.jar", "org.learnbyexample.HelloWorld"]
+CMD java -cp /app/jars/dockerk8s-1.0-SNAPSHOT.jar $JAVA_OPTS org.learnbyexample.HelloWorld $APP_ARGS
