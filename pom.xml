@@ -19,7 +19,7 @@
         <module>jpa</module>
         <module>swift</module>
         <module>serializers</module>
-        <module>docker_k8s</module>
+        <module>dockerk8s</module>
         <module>testing</module>
     </modules>
     <properties>
@@ -302,20 +302,21 @@
                                     <type>jar</type>
                                     <outputDirectory>${project.build.directory}/deploy</outputDirectory>
                                 </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.learnbyexample</groupId>
-                                    <artifactId>quickfixj</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>jar</type>
-                                    <outputDirectory>${project.build.directory}/deploy</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.learnbyexample</groupId>
-                                    <artifactId>springframework</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>jar</type>
-                                    <outputDirectory>${project.build.directory}/deploy</outputDirectory>
-                                </artifactItem>
+                                <!--     <artifactItem>
+                                         <groupId>org.learnbyexample</groupId>
+                                         <artifactId>quickfixj</artifactId>
+                                         <version>${project.version}</version>
+                                         <type>jar</type>
+                                         <outputDirectory>${project.build.directory}/deploy</outputDirectory>
+                                     </artifactItem>
+                                     -->
+                                     <artifactItem>
+                                         <groupId>org.learnbyexample</groupId>
+                                         <artifactId>dockerk8s</artifactId>
+                                         <version>${project.version}</version>
+                                         <type>jar</type>
+                                         <outputDirectory>${project.build.directory}/deploy</outputDirectory>
+                                     </artifactItem>
 
                             </artifactItems>
                         </configuration>

@@ -1,0 +1,14 @@
+# Use an official Java runtime as a parent image
+FROM openjdk:17-jdk-slim
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the current directory contents into the container
+COPY . /app
+
+# Compile the Java program
+RUN javac HelloWorld.java
+
+# Define the command to run your program
+CMD ["java", "HelloWorld"]
