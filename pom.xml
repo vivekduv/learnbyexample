@@ -302,14 +302,14 @@
                                     <type>jar</type>
                                     <outputDirectory>${project.build.directory}/deploy</outputDirectory>
                                 </artifactItem>
-                                <!--     <artifactItem>
+                                  <artifactItem>
                                          <groupId>org.learnbyexample</groupId>
                                          <artifactId>quickfixj</artifactId>
                                          <version>${project.version}</version>
                                          <type>jar</type>
                                          <outputDirectory>${project.build.directory}/deploy</outputDirectory>
                                      </artifactItem>
-                                     -->
+
                                      <artifactItem>
                                          <groupId>org.learnbyexample</groupId>
                                          <artifactId>dockerk8s</artifactId>

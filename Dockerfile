@@ -5,10 +5,10 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the current directory contents into the container
-COPY . /app
+COPY target/deploy/* /app/jars/
 
 # Compile the Java program
-RUN javac org/learnbyexample/HelloWorld.java
+#RUN javac org/learnbyexample/HelloWorld.java
 
 # Define the command to run your program
-CMD ["java", "org.learnbyexample.HelloWorld"]
+CMD ["java", "-cp", "/app/jars/dockerk8s-1.0-SNAPSHOT.jar", "org.learnbyexample.HelloWorld"]
