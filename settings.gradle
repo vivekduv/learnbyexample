@@ -1,6 +1,6 @@
 rootProject.name = 'learnbyexample'
 include(':swift')
-/*include(':mongodb')
+include(':mongodb')
 include(':jpa')
 include(':serializers')
 include(':cache')
@@ -11,4 +11,4 @@ include(':testing')
 include(':quickfixj')
 include(':corejava')
 include(':model')
-include(':camel')*/
+include(':camel')
