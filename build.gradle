@@ -1,0 +1,98 @@
+group 'org.learnbyexample'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 17
+
+ext {
+    projectVersion = '1.0'
+    springVersion = '5.3.25'
+    camelVersion = '3.20.2'
+    quickfixjVersion = '2.3.1'
+    slf4jVersion = '1.7.36'
+    quartz2Version = '2.25.4'
+    kafkaVersion = '3.4.0'
+    springKafkaVersion = '2.9.5'
+    jaxbApiVersion = '2.3.1'
+    jaxbCoreVersion = '2.3.0'
+    jasyptVersion = '1.9.3'
+    redisVersion = '4.3.1'
+    coherenceVersion = '22.06'
+    hazelcastVersion = '5.4.0'
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+dependencies {
+    implementation "com.hazelcast:hazelcast:${hazelcastVersion}"
+    implementation "redis.clients:jedis:${redisVersion}"
+    implementation "com.oracle.coherence.ce:coherence:${coherenceVersion}"
+    implementation "org.springframework:spring-context:${springVersion}"
+    implementation "org.springframework:spring-jdbc:${springVersion}"
+    implementation "org.springframework:spring-tx:${springVersion}"
+    implementation "org.springframework:spring-context-support:${springVersion}"
+    implementation "org.springframework:spring-expression:${springVersion}"
+    implementation "org.springframework:spring-jms:${springVersion}"
+    implementation "org.springframework:spring-messaging:${springVersion}"
+    implementation "org.springframework:spring-oxm:${springVersion}"
+    implementation "org.quickfixj:quickfixj-messages-all:${quickfixjVersion}"
+    implementation "org.apache.camel:camel-core"
+    implementation "org.apache.camel:camel-spring"
+    implementation "org.apache.camel:camel-spring-xml:${camelVersion}"
+    implementation "org.apache.camel:camel-kafka"
+    implementation "org.apache.camel:camel-core:${camelVersion}"
+    implementation "org.apache.camel:camel-main:${camelVersion}"
+    implementation "org.apache.camel:camel-spring:${camelVersion}"
+    implementation "org.apache.camel:camel-jms:${camelVersion}"
+    implementation "org.apache.camel:camel-sql:${camelVersion}"
+    implementation "org.apache.camel:camel-kafka:${camelVersion}"
+    implementation "org.apache.camel:camel-hazelcast:${camelVersion}"
+    implementation "org.apache.camel:camel-mina:${camelVersion}"
+    implementation "org.apache.camel:camel-mongodb:${camelVersion}"
+    implementation "org.apache.camel:camel-quickfix:${camelVersion}"
+    testImplementation "org.apache.camel:camel-quartz2:${quartz2Version}"
+    implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+    implementation "org.slf4j:slf4j-simple:${slf4jVersion}"
+    implementation "org.apache.kafka:kafka-clients:${kafkaVersion}"
+    implementation "org.apache.kafka:kafka-streams:${kafkaVersion}"
+    implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
+    implementation "javax.xml.bind:jaxb-api:${jaxbApiVersion}"
+    implementation "com.sun.xml.bind:jaxb-core:${jaxbCoreVersion}"
+    implementation "com.sun.xml.bind:jaxb-impl:${jaxbApiVersion}"
+    implementation "org.jasypt:jasypt:${jasyptVersion}"
+    implementation "org.jasypt:jasypt-spring4:${jasyptVersion}"
+
+}
+
+configurations {
+    copyJars
+}
+
+dependencies {
+    copyJars group: 'org.learnbyexample', name: 'cache', version: ${projectVersion}
+    copyJars group: 'org.learnbyexample', name: 'camel', version: ${projectVersion}
+    copyJars group: 'org.learnbyexample', name: 'corejava', version: ${projectVersion}
+    copyJars group: 'org.learnbyexample', name: 'kafka', version: ${projectVersion}
+    copyJars group: 'org.learnbyexample', name: 'model', version: ${projectVersion}
+    copyJars group: 'org.learnbyexample', name: 'mongodb', version: ${projectVersion}
+    copyJars group: 'org.learnbyexample', name: 'quickfixj', version: ${projectVersion}
+    copyJars group: 'org.learnbyexample', name: 'dockerk8s', version: ${projectVersion}
+}
+
+task copyModuleJars(type: Copy) {
+    from configurations.copyJars
+    into "${project.buildDir}/deploy"
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
