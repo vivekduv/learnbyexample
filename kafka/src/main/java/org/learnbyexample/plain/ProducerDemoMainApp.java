@@ -19,7 +19,7 @@ public class ProducerDemoMainApp {
         Properties properties = new Properties();
 
         // connect to Localhost
-         properties.setProperty("bootstrap.servers", "vivekduv.ddns.net:9092");
+         properties.setProperty("bootstrap.servers", "localhost:9092");
 
         // connect to Conduktor Playground
        /* properties.setProperty("bootstrap.servers", "cluster.playground.cdkt.io:9092");

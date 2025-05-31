@@ -24,4 +24,14 @@
         <property name="brokers" value="${spring.kafka.bootstrap-servers}"/>
     </bean>
 
+    <bean id="idempotentRepository" class="org.apache.camel.support.processor.idempotent.FileIdempotentRepository">
+        <property name="fileStore">
+            <bean class="java.io.File">
+                <constructor-arg value="${file.idempotent.repository}"/>
+            </bean>
+        </property>
+        <property name="maxFileStoreSize" value="10000000"/>
+        <property name="cacheSize" value="10000"/>
+    </bean>
+
 </beans>
