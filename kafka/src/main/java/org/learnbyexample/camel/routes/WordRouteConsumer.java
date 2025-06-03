@@ -2,6 +2,7 @@ package org.learnbyexample.camel.routes;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.spi.IdempotentRepository;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -34,6 +35,8 @@ public class WordRouteConsumer extends RouteBuilder {
                 .handled(true)
                 .stop(); // Stop processing current exchange on error
 
+
+
         from("file://" + inputDirectory + "?noop=true&include=.*\\.csv")
                 .routeId("CsvToKafkaRoute")
                 .log("Starting to process file: ${header.CamelFileName}")
@@ -43,16 +46,14 @@ public class WordRouteConsumer extends RouteBuilder {
                     String fileName = exchange.getIn().getHeader("CamelFileName", String.class);
 
                     // Create unique key using filename + line number + content hash
-                    String uniqueKey = fileName + ":" + line.hashCode();
+                    String uniqueKey = fileName + ":" + line;
                     exchange.getIn().setHeader("UniqueKey", uniqueKey);
                 })
-                .filter(simple("${body} != '' ")) // Skip empty lines and comments
+                //.filter(simple("${body} != '' ")) // Skip empty lines and comments
                 .idempotentConsumer(header("UniqueKey"), idempotentRepository) // Use file-based idempotent repository
                 .process(exchange -> {
                     String csvLine = exchange.getIn().getBody(String.class);
-
-
-                        exchange.getMessage().setBody(csvLine);
+                    exchange.getMessage().setBody(csvLine);
 
                 })
 
@@ -62,7 +63,7 @@ public class WordRouteConsumer extends RouteBuilder {
 
                 .end()
                 .end()
-                .log("Completed processing file: ${header.CamelFileName}")
+                //.log("Completed processing file: ${header.CamelFileName}")
                 .to("file://" + processedDirectory + "?fileName=${header.CamelFileName}.processed");
 
 

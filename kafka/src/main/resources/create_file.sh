@@ -2,7 +2,7 @@
 
 # Super fast version using printf
 OUTPUT_FILE="hello_world_10m.csv"
-TOTAL_ROWS=1000000
+TOTAL_ROWS=100000
 
 echo "Starting super fast generation of $TOTAL_ROWS rows..."
 start_time=$(date +%s)
