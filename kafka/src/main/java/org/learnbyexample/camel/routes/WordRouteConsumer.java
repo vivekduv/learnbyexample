@@ -37,7 +37,8 @@ public class WordRouteConsumer extends RouteBuilder {
 
 
 
-        from("file://" + inputDirectory + "?noop=true&include=.*\\.csv")
+        from("file://" + inputDirectory + "?include=.*\\.csv&move=" + processedDirectory + "/${date:now:yyyy-MM-dd}/${file:name}")
+
                 .routeId("CsvToKafkaRoute")
                 .log("Starting to process file: ${header.CamelFileName}")
                 .split(body().tokenize("\n")).streaming() // Process line by line
@@ -63,8 +64,8 @@ public class WordRouteConsumer extends RouteBuilder {
 
                 .end()
                 .end()
-                //.log("Completed processing file: ${header.CamelFileName}")
-                .to("file://" + processedDirectory + "?fileName=${header.CamelFileName}.processed");
+                .log("Completed processing file: ${header.CamelFileName}");
+                //.to("file://" + processedDirectory + "?fileName=${header.CamelFileName}.processed");
 
 
 
