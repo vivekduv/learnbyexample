@@ -7,6 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 @Component
 public class WordRouteConsumer extends RouteBuilder {
     UserConfig userConfig;
@@ -36,12 +41,14 @@ public class WordRouteConsumer extends RouteBuilder {
                 .stop(); // Stop processing current exchange on error
 
 
+        from("file://" + inputDirectory + "?include=.*\\.csv&noop=true")
 
-        from("file://" + inputDirectory + "?include=.*\\.csv&move=" + processedDirectory + "/${date:now:yyyy-MM-dd}/${file:name}")
+        //from("file://" + inputDirectory + "?include=.*\\.csv&move=" + processedDirectory + "${file:name.noext}_${date:now:yyyy-MM-dd_HHmmss}.${file:ext}")
 
                 .routeId("CsvToKafkaRoute")
                 .log("Starting to process file: ${header.CamelFileName}")
-                .split(body().tokenize("\n")).streaming() // Process line by line
+                .split(body().tokenize("\n")).streaming().shareUnitOfWork()
+                // Process line by line
                 .process(exchange -> {
                     String line = exchange.getIn().getBody(String.class);
                     String fileName = exchange.getIn().getHeader("CamelFileName", String.class);
@@ -64,8 +71,35 @@ public class WordRouteConsumer extends RouteBuilder {
 
                 .end()
                 .end()
-                .log("Completed processing file: ${header.CamelFileName}");
+                .log("Completed processing file: ${header.CamelFileName}")
                 //.to("file://" + processedDirectory + "?fileName=${header.CamelFileName}.processed");
+// Send completion signal to another route
+       .to("direct:moveFile");
+
+        from("direct:moveFile")
+                .log("Moving processed file: ${header.CamelFileName}")
+                .to("file://" + processedDirectory + "?fileName=${file:name.noext}_${date:now:HHmmss}.${file:ext}")
+                .process(exchange -> {
+                    String fileName = exchange.getIn().getHeader("CamelFileName", String.class);
+                    Path originalFile = Paths.get(inputDirectory, fileName);
+                    try {
+                        boolean deleted = Files.deleteIfExists(originalFile);
+                        if (deleted) {
+                            log.info("Successfully moved file: {} -> processed directory", fileName);
+                        } else {
+                            log.warn("File not found for deletion: {}", originalFile);
+                        }
+                    } catch (IOException e) {
+                        log.error("Failed to delete original file: {}", originalFile, e);
+                        throw new RuntimeException("Failed to move file", e);
+                    }
+                });
+
+
+
+        //.setHeader("CamelFileParent", constant(inputDirectory));
+                //.to("file://" + inputDirectory + "?fileExist=Ignore&operation=DELETE");
+
 
 
 
