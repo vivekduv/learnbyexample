@@ -23,7 +23,7 @@ public class KafkaConsumer {
             properties = "{'${spring.kafka.bootstrap-servers}'}")
     public void listenWithHeaders(
             @Payload String message,
-            @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition) {
+            @Header(KafkaHeaders.RECEIVED_PARTITION) int partition) {
         System.out.println(
                 "Received Message: " + message + "from partition: " + partition);
     }

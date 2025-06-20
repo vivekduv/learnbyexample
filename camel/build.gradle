@@ -1,19 +1,7 @@
-plugins {
-    id 'java'
-}
-
-group = 'org.learnbyexample'
-version = '1.0-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-}
-
-test {
-    useJUnitPlatform()
+    implementation 'org.apache.camel:camel-core:4.12.0'
+    implementation 'org.apache.camel:camel-main:4.12.0'
+    implementation 'org.apache.camel:camel-spring:4.12.0'
+    implementation 'org.apache.camel:camel-kafka:4.12.0'
+    implementation 'org.springframework:spring-context'
 }

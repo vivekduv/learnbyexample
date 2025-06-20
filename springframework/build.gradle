@@ -1,3 +1,4 @@
+
 plugins {
     id 'java'
 }
@@ -9,9 +10,81 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    springVersion = '6.1.3'
+    springKafkaVersion = '3.1.1'
+    kafkaVersion = '3.6.1'
+    camelVersion = '4.3.0'
+    jacksonVersion = '2.15.3'
+    jasyptVersion = '1.9.3'
+    jasyptSpringVersion = '1.9.3'
+
+}
+
 dependencies {
+    // Spring Framework
+    implementation "org.springframework:spring-core:${springVersion}"
+    implementation "org.springframework:spring-context:${springVersion}"
+    implementation "org.springframework:spring-beans:${springVersion}"
+    implementation "org.springframework:spring-aop:${springVersion}"
+    implementation "org.springframework:spring-aspects:${springVersion}"
+    implementation "org.springframework:spring-tx:${springVersion}"
+    implementation "org.springframework:spring-messaging:${springVersion}"
+    implementation "org.jasypt:jasypt:${jasyptVersion}"
+    implementation "org.jasypt:jasypt-spring31:${jasyptSpringVersion}"
+
+    // Spring Kafka
+    implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
+
+    // Apache Kafka
+    implementation "org.apache.kafka:kafka-clients:${kafkaVersion}"
+    implementation "org.apache.kafka:kafka-streams:${kafkaVersion}"
+    implementation "org.apache.kafka:connect-json:${kafkaVersion}"
+    implementation "org.apache.kafka:connect-api:${kafkaVersion}"
+    implementation "org.apache.kafka:kafka-tools:${kafkaVersion}"
+
+    // Apache Camel Core
+    implementation platform('org.apache.camel:camel-bom:4.3.0')
+    implementation 'org.apache.camel:camel-core-engine'
+    implementation 'org.apache.camel:camel-main'
+    implementation 'org.apache.camel:camel-base'
+
+    implementation "org.apache.camel:camel-core:${camelVersion}"
+    implementation "org.apache.camel:camel-core-engine:${camelVersion}"
+    implementation "org.apache.camel:camel-api:${camelVersion}"
+    implementation "org.apache.camel:camel-management-api:${camelVersion}"
+    implementation "org.apache.camel:camel-support:${camelVersion}"
+    implementation "org.apache.camel:camel-util:${camelVersion}"
+    implementation "org.apache.camel:camel-main:${camelVersion}"
+    implementation "org.apache.camel:camel-core:${camelVersion}"
+    implementation "org.apache.camel:camel-api:${camelVersion}"
+    implementation "org.apache.camel:camel-util:${camelVersion}"
+
+
+    implementation 'org.apache.camel:camel-main:4.3.0'
+
+    // Camel Components
+    implementation "org.apache.camel:camel-kafka:${camelVersion}"
+    implementation "org.apache.camel:camel-spring:${camelVersion}"
+    implementation "org.apache.camel:camel-stream:${camelVersion}"
+    implementation "org.apache.camel:camel-bean:${camelVersion}"
+    implementation "org.apache.camel:camel-direct:${camelVersion}"
+    implementation "org.apache.camel:camel-jackson:${camelVersion}"
+
+    // Jackson (JSON processing)
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
+
+    // Logging
+    implementation 'org.slf4j:slf4j-api:2.0.9'
+    implementation 'ch.qos.logback:logback-classic:1.4.14'
+
+    // Test dependencies
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation "org.springframework:spring-test:${springVersion}"
 }
 
 test {

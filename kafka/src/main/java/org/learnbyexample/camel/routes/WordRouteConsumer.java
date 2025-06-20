@@ -54,7 +54,12 @@ public class WordRouteConsumer extends RouteBuilder {
                     String fileName = exchange.getIn().getHeader("CamelFileName", String.class);
 
                     // Create unique key using filename + line number + content hash
-                    String uniqueKey = fileName + ":" + line;
+                    Integer splitIndex = exchange.getIn().getHeader("CamelSplitIndex", Integer.class);
+                    Integer splitSize = exchange.getIn().getHeader("CamelSplitSize", Integer.class);
+
+                    int lineNumber = splitIndex != null ? splitIndex + 1 : 1;
+
+                    String uniqueKey = fileName + ":" + splitIndex + "of " + splitSize;
                     exchange.getIn().setHeader("UniqueKey", uniqueKey);
                 })
                 //.filter(simple("${body} != '' ")) // Skip empty lines and comments
@@ -78,7 +83,7 @@ public class WordRouteConsumer extends RouteBuilder {
 
         from("direct:moveFile")
                 .log("Moving processed file: ${header.CamelFileName}")
-                .to("file://" + processedDirectory + "?fileName=${file:name.noext}_${date:now:HHmmss}.${file:ext}")
+                .to("file://" + processedDirectory + "?fileName=${file:name.noext}_${date:now:yyyy-MM-dd_HHmmss}.${file:ext}")
                 .process(exchange -> {
                     String fileName = exchange.getIn().getHeader("CamelFileName", String.class);
                     Path originalFile = Paths.get(inputDirectory, fileName);

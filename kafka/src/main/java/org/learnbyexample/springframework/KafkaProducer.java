@@ -28,7 +28,7 @@ public class KafkaProducer {
 
     public void send(String topicName , Greeting message){
         LOG.info("sending message='{}' to topic='{}'", message, topicName);
-        ListenableFuture<SendResult<String, Greeting>> future = kafkaTemplateGreeting.send(topicName, message);
+        var future = (ListenableFuture<SendResult<String, Greeting>>) kafkaTemplateGreeting.send(topicName, message);
 
         future.addCallback(new ListenableFutureCallback<SendResult<String, Greeting>>() {
 
@@ -46,7 +46,7 @@ public class KafkaProducer {
     }
     public void send(String topicName , String message){
         LOG.info("sending message='{}' to topic='{}'", message, topicName);
-        ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(topicName, message);
+        ListenableFuture<SendResult<String, String>> future = (ListenableFuture<SendResult<String, String>>) (ListenableFuture<SendResult<String, String>>) kafkaTemplate.send(topicName, message);
         future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
 
             @Override
